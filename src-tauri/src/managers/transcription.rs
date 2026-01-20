@@ -240,7 +240,9 @@ impl TranscriptionManager {
         // Create appropriate engine based on model type
         let loaded_engine = match model_info.engine_type {
             EngineType::Whisper => {
-                let path = model_path.as_ref().unwrap();
+                let path = model_path.as_ref().ok_or_else(|| {
+                    anyhow::anyhow!("Model path missing for Whisper engine '{}'", model_id)
+                })?;
                 let mut engine = WhisperEngine::new();
                 engine.load_model(path).map_err(|e| {
                     let error_msg = format!("Failed to load whisper model {}: {}", model_id, e);
@@ -258,7 +260,9 @@ impl TranscriptionManager {
                 LoadedEngine::Whisper(engine)
             }
             EngineType::Parakeet => {
-                let path = model_path.as_ref().unwrap();
+                let path = model_path.as_ref().ok_or_else(|| {
+                    anyhow::anyhow!("Model path missing for Parakeet engine '{}'", model_id)
+                })?;
                 let mut engine = ParakeetEngine::new();
                 engine
                     .load_model_with_params(path, ParakeetModelParams::int8())
@@ -279,7 +283,9 @@ impl TranscriptionManager {
                 LoadedEngine::Parakeet(engine)
             }
             EngineType::Moonshine => {
-                let path = model_path.as_ref().unwrap();
+                let path = model_path.as_ref().ok_or_else(|| {
+                    anyhow::anyhow!("Model path missing for Moonshine engine '{}'", model_id)
+                })?;
                 let mut engine = MoonshineEngine::new();
                 engine
                     .load_model_with_params(path, MoonshineModelParams::variant(ModelVariant::Base))

@@ -163,16 +163,16 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     // Choose the appropriate initial icon based on theme
     let initial_icon_path = tray::get_icon_path(initial_theme, tray::TrayIconState::Idle);
 
+    let icon_path = app_handle
+        .path()
+        .resolve(initial_icon_path, tauri::path::BaseDirectory::Resource)
+        .expect("Failed to resolve tray icon path - ensure resources are bundled correctly");
+
+    let icon_image = Image::from_path(&icon_path)
+        .expect("Failed to load tray icon image - ensure icon file exists and is valid");
+
     let tray = TrayIconBuilder::new()
-        .icon(
-            Image::from_path(
-                app_handle
-                    .path()
-                    .resolve(initial_icon_path, tauri::path::BaseDirectory::Resource)
-                    .unwrap(),
-            )
-            .unwrap(),
-        )
+        .icon(icon_image)
         .show_menu_on_left_click(true)
         .icon_as_template(true)
         .on_menu_event(|app, event| match event.id.as_ref() {
@@ -201,7 +201,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
             _ => {}
         })
         .build(app_handle)
-        .unwrap();
+        .expect("Failed to build tray icon - check system tray availability");
     app_handle.manage(tray);
 
     // Initialize tray menu with idle state
