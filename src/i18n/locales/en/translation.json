@@ -8,6 +8,7 @@
   },
   "sidebar": {
     "general": "General",
+    "files": "Files",
     "advanced": "Advanced",
     "snippets": "Snippets",
     "formatting": "Formatting",
@@ -165,6 +166,21 @@
         "placeholder": "Select microphone...",
         "loading": "Loading..."
       },
+      "systemAudio": {
+        "title": "System Audio",
+        "description": "Capture audio from Zoom, Teams, or other applications",
+        "available": "System audio capture available",
+        "notAvailable": "No system audio devices detected",
+        "nativeAvailable": "Native capture available",
+        "setupRequired": "Setup Required",
+        "detectedDevices": "Detected devices:",
+        "deviceTypes": {
+          "microphone": "Microphone",
+          "system_loopback": "System Audio",
+          "virtual_device": "Virtual Device",
+          "unknown": "Unknown"
+        }
+      },
       "audioFeedback": {
         "label": "Audio Feedback",
         "description": "Play sound when recording starts and stops"
@@ -182,6 +198,27 @@
     },
     "advanced": {
       "title": "Advanced",
+      "description": "Fine-tune app behavior, recording, and system settings",
+      "sections": {
+        "appBehavior": {
+          "title": "App Behavior"
+        },
+        "recordingInput": {
+          "title": "Recording & Input"
+        },
+        "outputPaste": {
+          "title": "Output & Paste"
+        },
+        "transcriptionProcessing": {
+          "title": "Transcription Processing"
+        },
+        "featureToggles": {
+          "title": "Feature Toggles"
+        },
+        "storageDiagnostics": {
+          "title": "Storage & Diagnostics"
+        }
+      },
       "startHidden": {
         "label": "Start Hidden",
         "description": "Launch to system tray without opening the window."
@@ -242,7 +279,36 @@
         "description": "Add words that are often misheard or misspelled during transcription. The system will automatically correct similar-sounding words to match your list.",
         "placeholder": "Add a word",
         "add": "Add",
-        "remove": "Remove {{word}}"
+        "remove": "Remove {{word}}",
+        "count": "{{count}} / {{max}} words",
+        "search": "Search words...",
+        "noResults": "No words match your search",
+        "export": "Export words",
+        "bulkImport": {
+          "title": "Bulk Import",
+          "description": "Enter words separated by commas, semicolons, or new lines. Duplicates and invalid words will be automatically filtered out.",
+          "placeholder": "word1, word2, word3\nword4; word5",
+          "import": "Import"
+        }
+      },
+      "showMeetingMenu": {
+        "label": "Show Meeting Menu",
+        "description": "Show the Meeting option in the sidebar menu"
+      },
+      "livePreview": {
+        "title": "Live Preview",
+        "label": "Live Preview Mode",
+        "description": "Show partial transcription while recording. Text updates every few seconds during speech.",
+        "interval": {
+          "label": "Preview Interval",
+          "description": "How often to update the preview text during recording"
+        }
+      },
+      "whisperMode": {
+        "title": "Whisper Mode",
+        "label": "Enable Whisper Mode",
+        "description": "Enables detection of quieter speech for low-volume dictation in quiet environments. Uses a lower voice activity detection threshold.",
+        "note": "Whisper mode may pick up more background noise. Speak clearly but quietly."
       }
     },
     "snippets": {
@@ -403,6 +469,26 @@
       "selectLanguage": "Select language",
       "supportedModels": "Supported by Whisper Large and Groq Whisper models. Parakeet and Moonshine are English-only."
     },
+    "diarization": {
+      "title": "Speaker Diarization",
+      "enable": {
+        "label": "Enable Speaker Diarization",
+        "description": "Identify and label different speakers in the transcription"
+      },
+      "status": {
+        "available": "Diarization models ready",
+        "notAvailable": "Models not downloaded",
+        "downloading": "Downloading models... {{progress}}%",
+        "error": "Error: {{message}}"
+      },
+      "models": {
+        "title": "Required Models",
+        "download": "Download Models",
+        "downloading": "Downloading...",
+        "size": "Pyannote models (~33MB)"
+      },
+      "note": "Speaker labels (Speaker 1, Speaker 2, etc.) will appear in transcription segments and exported files. Pyannote supports unlimited speakers."
+    },
     "meeting": {
       "title": "Meeting Mode",
       "enable": {
@@ -509,6 +595,73 @@
       "delete": "Delete entry",
       "deleteError": "Failed to delete entry. Please try again."
     },
+    "files": {
+      "title": "File Transcription",
+      "description": "Transcribe audio and video files. Drag and drop files or click to browse.",
+      "dropzone": {
+        "title": "Drop audio or video files here",
+        "subtitle": "or click to browse",
+        "browse": "Browse Files",
+        "formats": "Supports: {{formats}}"
+      },
+      "queue": {
+        "title": "Transcription Queue",
+        "processAll": "Process All",
+        "stop": "Stop",
+        "clearCompleted": "Clear Completed"
+      },
+      "job": {
+        "copy": "Copy transcription",
+        "expand": "Show transcription",
+        "collapse": "Hide transcription",
+        "remove": "Remove from queue"
+      },
+      "export": {
+        "title": "Export transcription",
+        "formats": {
+          "txt": "Plain Text (.txt)",
+          "srt": "SRT Subtitles (.srt)",
+          "vtt": "WebVTT Subtitles (.vtt)",
+          "json": "JSON (.json)",
+          "md": "Markdown (.md)",
+          "csv": "CSV Spreadsheet (.csv)",
+          "html": "HTML Document (.html)",
+          "docx": "Word Document (.docx)",
+          "pdf": "PDF Document (.pdf)"
+        }
+      },
+      "status": {
+        "queued": "Queued",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "watchFolder": {
+        "title": "Watch Folders",
+        "description": "Automatically transcribe files dropped into monitored folders",
+        "add": "Add Folder",
+        "remove": "Remove folder",
+        "empty": "No watch folders configured",
+        "emptyHint": "Add a folder to automatically transcribe new audio and video files",
+        "enable": "Enable watching",
+        "disable": "Disable watching",
+        "settings": "Folder settings",
+        "watching": "Watching",
+        "error": "Error",
+        "recursive": "Include subfolders",
+        "recursiveDescription": "Also watch files in subdirectories",
+        "autoProcess": "Auto-process files",
+        "autoProcessDescription": "Automatically start transcription when files are detected",
+        "errors": {
+          "addFailed": "Failed to add watch folder",
+          "dialogFailed": "Failed to open folder dialog",
+          "removeFailed": "Failed to remove watch folder",
+          "toggleFailed": "Failed to toggle watch folder",
+          "updateFailed": "Failed to update watch folder settings"
+        }
+      }
+    },
     "debug": {
       "title": "Advanced",
       "logDirectory": {
@@ -594,10 +747,55 @@
       },
       "acknowledgments": {
         "title": "Acknowledgments",
+        "handy": {
+          "title": "Handy",
+          "description": "The original project that made PaperFlow possible",
+          "details": "PaperFlow is built upon the incredible foundation of Handy, created by CJ Pais. His vision of making speech-to-text accessible, private, and delightful inspired everything you see here. We're deeply grateful for his open-source contribution to the community. Thank you, CJ, for sharing your work with the world."
+        },
+        "tauri": {
+          "title": "Tauri",
+          "description": "Build smaller, faster, and more secure desktop applications",
+          "details": "Tauri is the backbone that makes PaperFlow feel native on every platform. This remarkable framework lets us deliver a lightweight, secure app without the bloat. Huge thanks to the Tauri team for proving that desktop apps can be both beautiful and efficient."
+        },
+        "parakeet": {
+          "title": "NVIDIA Parakeet",
+          "description": "State-of-the-art automatic speech recognition",
+          "details": "Parakeet brings lightning-fast, incredibly accurate transcription to PaperFlow. Built by NVIDIA's brilliant NeMo research team, it understands English like a native speaker and runs beautifully on your local machine. A heartfelt thank you for making this magic possible."
+        },
         "whisper": {
-          "title": "Whisper.cpp",
-          "description": "High-performance inference of OpenAI's Whisper automatic speech recognition model",
-          "details": "PaperFlow uses Whisper.cpp for fast, local speech-to-text processing. Thanks to the amazing work by Georgi Gerganov and contributors."
+          "title": "OpenAI Whisper",
+          "description": "Multilingual speech recognition that just works",
+          "details": "Whisper opened the door to truly accessible speech recognition. Thanks to OpenAI for training and releasing this incredible model, and to Georgi Gerganov for whisper.cpp which makes it fly on local hardware."
+        },
+        "moonshine": {
+          "title": "Moonshine",
+          "description": "Tiny but mighty speech recognition",
+          "details": "Moonshine proves that great things come in small packages. This lightweight model delivers impressive accuracy while being incredibly fast. Thank you to the Useful Sensors team for creating something so elegantly efficient."
+        },
+        "silero": {
+          "title": "Silero VAD",
+          "description": "Voice Activity Detection that knows when you're speaking",
+          "details": "Silero VAD is the unsung hero that listens for your voice and filters out the silence. It's what makes PaperFlow feel responsive and intelligent. Thanks to the Silero team for this essential piece of the puzzle."
+        },
+        "groq": {
+          "title": "Groq",
+          "description": "Blazingly fast cloud inference",
+          "details": "When you need the cloud, Groq delivers transcription at unprecedented speeds. Their LPU technology is genuinely impressive, and their generous API makes high-quality cloud transcription accessible to everyone."
+        },
+        "rust": {
+          "title": "Rust",
+          "description": "A language empowering everyone to build reliable software",
+          "details": "Rust powers PaperFlow's backend with its promise of safety and performance. To the Rust community: thank you for creating a language that makes writing correct, fast code a joy rather than a chore."
+        },
+        "react": {
+          "title": "React",
+          "description": "The library for building user interfaces",
+          "details": "React makes PaperFlow's interface feel smooth and responsive. Thanks to Meta and the countless contributors who've made frontend development so much more pleasant."
+        },
+        "community": {
+          "title": "Open Source Community",
+          "description": "The shoulders of giants",
+          "details": "PaperFlow exists because of thousands of open-source contributors who share their work freely. From the smallest utility library to the largest framework, every contribution matters. Thank you all for believing in a world where knowledge is shared."
         }
       }
     }
@@ -618,6 +816,8 @@
   },
   "common": {
     "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
     "save": "Save",
     "cancel": "Cancel",
     "reset": "Reset",

@@ -7,8 +7,13 @@ use log::{debug, error, info};
 use reqwest::multipart;
 use serde::Deserialize;
 use std::io::Cursor;
+use std::time::Duration;
 
 const GROQ_API_URL: &str = "https://api.groq.com/openai/v1/audio/transcriptions";
+
+/// Timeout for Groq API requests (15 seconds)
+/// This prevents hanging on slow/unresponsive connections
+const GROQ_REQUEST_TIMEOUT: Duration = Duration::from_secs(15);
 
 #[derive(Debug, Deserialize)]
 struct GroqTranscriptionResponse {
@@ -91,15 +96,25 @@ pub async fn transcribe(
         }
     }
 
-    // Send request to Groq API
-    let client = reqwest::Client::new();
+    // Send request to Groq API with timeout
+    let client = reqwest::Client::builder()
+        .timeout(GROQ_REQUEST_TIMEOUT)
+        .build()
+        .map_err(|e| format!("Failed to create HTTP client: {}", e))?;
+
     let response = client
         .post(GROQ_API_URL)
         .header("Authorization", format!("Bearer {}", api_key))
         .multipart(form)
         .send()
         .await
-        .map_err(|e| format!("HTTP request failed: {}", e))?;
+        .map_err(|e| {
+            if e.is_timeout() {
+                "Groq API request timed out. Please try again.".to_string()
+            } else {
+                format!("HTTP request failed: {}", e)
+            }
+        })?;
 
     let status = response.status();
 
@@ -226,15 +241,25 @@ pub async fn transcribe_multilingual(
     }
     // Don't set a language parameter - let Groq auto-detect for code-switching
 
-    // Send request to Groq API
-    let client = reqwest::Client::new();
+    // Send request to Groq API with timeout
+    let client = reqwest::Client::builder()
+        .timeout(GROQ_REQUEST_TIMEOUT)
+        .build()
+        .map_err(|e| format!("Failed to create HTTP client: {}", e))?;
+
     let response = client
         .post(GROQ_API_URL)
         .header("Authorization", format!("Bearer {}", api_key))
         .multipart(form)
         .send()
         .await
-        .map_err(|e| format!("HTTP request failed: {}", e))?;
+        .map_err(|e| {
+            if e.is_timeout() {
+                "Groq API request timed out. Please try again.".to_string()
+            } else {
+                format!("HTTP request failed: {}", e)
+            }
+        })?;
 
     let status = response.status();
 

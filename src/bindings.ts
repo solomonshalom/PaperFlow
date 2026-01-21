@@ -420,6 +420,14 @@ async changeLanguageDetectionSensitivitySetting(sensitivity: number) : Promise<R
     else return { status: "error", error: e  as any };
 }
 },
+async changeShowMeetingMenuSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_show_meeting_menu_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async changeMeetingModeEnabledSetting(enabled: boolean) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("change_meeting_mode_enabled_setting", { enabled }) };
@@ -463,6 +471,38 @@ async changeMeetingSummaryPromptSetting(prompt: string) : Promise<Result<null, s
 async changeMeetingActionItemsPromptSetting(prompt: string) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("change_meeting_action_items_prompt_setting", { prompt }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeLivePreviewEnabledSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_live_preview_enabled_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeLivePreviewIntervalSetting(intervalMs: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_live_preview_interval_setting", { intervalMs }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeWhisperModeEnabledSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_whisper_mode_enabled_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeVadThresholdSetting(threshold: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_vad_threshold_setting", { threshold }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
@@ -835,6 +875,80 @@ async getClamshellMicrophone() : Promise<Result<string, string>> {
 async isRecording() : Promise<boolean> {
     return await TAURI_INVOKE("is_recording");
 },
+/**
+ * Get information about system audio capture for the current platform
+ */
+async getSystemAudioInfo() : Promise<SystemAudioInfo> {
+    return await TAURI_INVOKE("get_system_audio_info");
+},
+/**
+ * Check if native system audio capture is available
+ */
+async isNativeSystemAudioAvailable() : Promise<boolean> {
+    return await TAURI_INVOKE("is_native_system_audio_available");
+},
+/**
+ * Start native system audio capture
+ */
+async startSystemAudioCapture() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("start_system_audio_capture") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Stop native system audio capture and return samples
+ */
+async stopSystemAudioCapture() : Promise<Result<number[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("stop_system_audio_capture") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Check if currently capturing system audio
+ */
+async isCapturingSystemAudio() : Promise<boolean> {
+    return await TAURI_INVOKE("is_capturing_system_audio");
+},
+/**
+ * Get the current diarization status
+ */
+async getDiarizationStatus() : Promise<DiarizationStatus> {
+    return await TAURI_INVOKE("get_diarization_status");
+},
+/**
+ * Enable or disable diarization
+ */
+async changeDiarizationEnabledSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_diarization_enabled_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Get information about required models
+ */
+async getDiarizationModelInfo() : Promise<DiarizationModelInfo[]> {
+    return await TAURI_INVOKE("get_diarization_model_info");
+},
+/**
+ * Download diarization models
+ */
+async downloadDiarizationModels() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("download_diarization_models") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async setModelUnloadTimeout(timeout: ModelUnloadTimeout) : Promise<void> {
     await TAURI_INVOKE("set_model_unload_timeout", { timeout });
 },
@@ -903,6 +1017,209 @@ async updateRecordingRetentionPeriod(period: string) : Promise<Result<null, stri
 }
 },
 /**
+ * Get list of supported file extensions
+ */
+async getSupportedFileExtensions() : Promise<string[]> {
+    return await TAURI_INVOKE("get_supported_file_extensions");
+},
+/**
+ * Queue a file for transcription
+ */
+async queueFileForTranscription(filePath: string) : Promise<Result<FileTranscriptionJob, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("queue_file_for_transcription", { filePath }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Queue multiple files for transcription
+ */
+async queueFilesForTranscription(filePaths: string[]) : Promise<Result<FileTranscriptionJob[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("queue_files_for_transcription", { filePaths }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Process the next queued file
+ */
+async processNextFile() : Promise<Result<string | null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("process_next_file") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Process all queued files (runs on background thread to avoid blocking UI)
+ */
+async processAllFiles() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("process_all_files") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Cancel the current file transcription
+ */
+async cancelFileTranscription() : Promise<void> {
+    await TAURI_INVOKE("cancel_file_transcription");
+},
+/**
+ * Cancel a specific job by ID
+ */
+async cancelFileTranscriptionJob(jobId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("cancel_file_transcription_job", { jobId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Get all transcription jobs
+ */
+async getFileTranscriptionJobs() : Promise<FileTranscriptionJob[]> {
+    return await TAURI_INVOKE("get_file_transcription_jobs");
+},
+/**
+ * Get a specific job by ID
+ */
+async getFileTranscriptionJob(jobId: string) : Promise<FileTranscriptionJob | null> {
+    return await TAURI_INVOKE("get_file_transcription_job", { jobId });
+},
+/**
+ * Clear completed, failed, and cancelled jobs
+ */
+async clearCompletedFileJobs() : Promise<void> {
+    await TAURI_INVOKE("clear_completed_file_jobs");
+},
+/**
+ * Remove a specific job
+ */
+async removeFileTranscriptionJob(jobId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("remove_file_transcription_job", { jobId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Check if file transcription is currently processing
+ */
+async isFileTranscriptionProcessing() : Promise<boolean> {
+    return await TAURI_INVOKE("is_file_transcription_processing");
+},
+/**
+ * Export a transcript in the specified format
+ */
+async exportTranscript(text: string, format: ExportFormat, title: string | null, sourceFile: string | null, durationMs: number | null, segments: TranscriptSegment[] | null) : Promise<Result<string, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("export_transcript", { text, format, title, sourceFile, durationMs, segments }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Export a transcript and save to file
+ */
+async exportTranscriptToFile(text: string, format: ExportFormat, filePath: string, title: string | null, sourceFile: string | null, durationMs: number | null, segments: TranscriptSegment[] | null) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("export_transcript_to_file", { text, format, filePath, title, sourceFile, durationMs, segments }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Get the appropriate file extension for a format
+ */
+async getExportFileExtension(format: ExportFormat) : Promise<string> {
+    return await TAURI_INVOKE("get_export_file_extension", { format });
+},
+/**
+ * Get all available export formats
+ */
+async getAvailableExportFormats() : Promise<ExportFormat[]> {
+    return await TAURI_INVOKE("get_available_export_formats");
+},
+/**
+ * Get all configured watch folders
+ */
+async getWatchFolders() : Promise<WatchFolderConfig[]> {
+    return await TAURI_INVOKE("get_watch_folders");
+},
+/**
+ * Add a new watch folder
+ */
+async addWatchFolder(path: string, recursive: boolean) : Promise<Result<WatchFolderConfig, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("add_watch_folder", { path, recursive }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Remove a watch folder
+ */
+async removeWatchFolder(folderId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("remove_watch_folder", { folderId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Update a watch folder configuration
+ */
+async updateWatchFolder(config: WatchFolderConfig) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("update_watch_folder", { config }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Get the status of all watch folders
+ */
+async getWatchFolderStatus() : Promise<WatchFolderStatus[]> {
+    return await TAURI_INVOKE("get_watch_folder_status");
+},
+/**
+ * Start watching a specific folder
+ */
+async startWatchFolder(folderId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("start_watch_folder", { folderId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Stop watching a specific folder
+ */
+async stopWatchFolder(folderId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("stop_watch_folder", { folderId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
  * Checks if the Mac is a laptop by detecting battery presence
  * 
  * This uses pmset to check for battery information.
@@ -928,8 +1245,12 @@ async isLaptop() : Promise<Result<boolean, string>> {
 
 /** user-defined types **/
 
-export type AppSettings = { bindings: Partial<{ [key in string]: ShortcutBinding }>; push_to_talk: boolean; audio_feedback: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; update_checks_enabled?: boolean; selected_model?: string; always_on_microphone?: boolean; selected_microphone?: string | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: Partial<{ [key in string]: string }>; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; snippets?: Snippet[]; snippets_enabled?: boolean; auto_format_enabled?: boolean; auto_format_lists?: boolean; verbal_commands_enabled?: boolean; tone_adjustment_enabled?: boolean; default_tone?: ToneStyle; app_tone_mappings?: Partial<{ [key in string]: ToneStyle }>; developer_mode?: DeveloperMode; preserve_code_syntax?: boolean; developer_dictionary?: string[]; correction_detection_enabled?: boolean; context_awareness_enabled?: boolean; context_per_app_permissions?: Partial<{ [key in string]: boolean }>; groq_transcription_api_key?: string; multilingual_mode_enabled?: boolean; primary_language?: string | null; secondary_language?: string | null; language_detection_sensitivity?: number; meeting_mode_enabled?: boolean; meeting_chunk_duration_seconds?: number; meeting_auto_summarize?: boolean; meeting_extract_action_items?: boolean; meeting_summary_prompt?: string; meeting_action_items_prompt?: string }
-export type AudioDevice = { index: string; name: string; is_default: boolean }
+export type AppSettings = { bindings: Partial<{ [key in string]: ShortcutBinding }>; push_to_talk: boolean; audio_feedback: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; update_checks_enabled?: boolean; selected_model?: string; always_on_microphone?: boolean; selected_microphone?: string | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: Partial<{ [key in string]: string }>; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; snippets?: Snippet[]; snippets_enabled?: boolean; auto_format_enabled?: boolean; auto_format_lists?: boolean; verbal_commands_enabled?: boolean; tone_adjustment_enabled?: boolean; default_tone?: ToneStyle; app_tone_mappings?: Partial<{ [key in string]: ToneStyle }>; developer_mode?: DeveloperMode; preserve_code_syntax?: boolean; developer_dictionary?: string[]; correction_detection_enabled?: boolean; context_awareness_enabled?: boolean; context_per_app_permissions?: Partial<{ [key in string]: boolean }>; groq_transcription_api_key?: string; multilingual_mode_enabled?: boolean; primary_language?: string | null; secondary_language?: string | null; language_detection_sensitivity?: number; show_meeting_menu?: boolean; meeting_mode_enabled?: boolean; meeting_chunk_duration_seconds?: number; meeting_auto_summarize?: boolean; meeting_extract_action_items?: boolean; meeting_summary_prompt?: string; meeting_action_items_prompt?: string; live_preview_enabled?: boolean; live_preview_interval_ms?: number; watch_folders?: WatchFolderConfig[] | null; whisper_mode_enabled?: boolean; vad_threshold?: number; diarization_enabled?: boolean }
+export type AudioDevice = { index: string; name: string; is_default: boolean; device_type: AudioDeviceType }
+/**
+ * Device type classification for audio devices
+ */
+export type AudioDeviceType = "microphone" | "system_loopback" | "virtual_device" | "unknown"
 export type BindingResponse = { success: boolean; binding: ShortcutBinding | null; error: string | null }
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
@@ -946,7 +1267,27 @@ export type DeveloperMode =
  * Always use developer mode
  */
 "always"
+/**
+ * Model info for display in UI
+ */
+export type DiarizationModelInfo = { name: string; description: string; size_bytes: number }
+/**
+ * Diarization status response
+ */
+export type DiarizationStatus = { available: boolean; enabled: boolean; models_downloaded: boolean; download_progress: number | null; error: string | null }
 export type EngineType = "Whisper" | "Parakeet" | "Moonshine" | "GroqCloud"
+/**
+ * Export format options
+ */
+export type ExportFormat = "txt" | "srt" | "vtt" | "json" | "markdown" | "csv" | "html" | "docx" | "pdf"
+/**
+ * A single file transcription job
+ */
+export type FileTranscriptionJob = { id: string; file_path: string; file_name: string; file_size: number; status: FileTranscriptionStatus; progress: number; transcription: string | null; error: string | null; duration_seconds: number | null; created_at: number; completed_at: number | null }
+/**
+ * Status of a file transcription job
+ */
+export type FileTranscriptionStatus = "queued" | "processing" | "completed" | "failed" | "cancelled"
 export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null }
 export type LLMPrompt = { id: string; name: string; prompt: string }
 export type LogLevel = "trace" | "debug" | "info" | "warn" | "error"
@@ -1012,6 +1353,34 @@ case_sensitive?: boolean;
 whole_word?: boolean }
 export type SoundTheme = "marimba" | "pop" | "custom"
 /**
+ * Information about system audio capture capabilities
+ */
+export type SystemAudioInfo = { 
+/**
+ * Whether system audio capture is currently available (via virtual devices or native)
+ */
+available: boolean; 
+/**
+ * Whether native system audio capture is available (no drivers needed)
+ */
+native_available: boolean; 
+/**
+ * Whether additional setup is required
+ */
+requires_setup: boolean; 
+/**
+ * Platform-specific setup instructions
+ */
+setup_instructions: string; 
+/**
+ * List of detected system audio devices (virtual drivers)
+ */
+devices: string[]; 
+/**
+ * Platform-specific info about native capture
+ */
+native_info: string }
+/**
  * Tone styles for transcription adjustment
  */
 export type ToneStyle = 
@@ -1031,6 +1400,18 @@ export type ToneStyle =
  * Minimal changes, faithful transcription
  */
 "neutral"
+/**
+ * Segment with timing information for SRT/VTT export
+ */
+export type TranscriptSegment = { start_ms: number; end_ms: number; text: string; speaker: string | null }
+/**
+ * Configuration for a watched folder
+ */
+export type WatchFolderConfig = { id: string; path: string; enabled: boolean; recursive: boolean; auto_process: boolean }
+/**
+ * Status of a watch folder
+ */
+export type WatchFolderStatus = { folder_id: string; is_watching: boolean; last_error: string | null; files_processed: number }
 
 /** tauri-specta globals **/
 

@@ -845,6 +845,15 @@ pub fn change_language_detection_sensitivity_setting(
 
 #[tauri::command]
 #[specta::specta]
+pub fn change_show_meeting_menu_setting(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.show_meeting_menu = enabled;
+    settings::write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
 pub fn change_meeting_mode_enabled_setting(app: AppHandle, enabled: bool) -> Result<(), String> {
     let mut settings = settings::get_settings(&app);
     settings.meeting_mode_enabled = enabled;
@@ -900,6 +909,68 @@ pub fn change_meeting_action_items_prompt_setting(
     let mut settings = settings::get_settings(&app);
     settings.meeting_action_items_prompt = prompt;
     settings::write_settings(&app, settings);
+    Ok(())
+}
+
+// === Live Preview Commands ===
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_live_preview_enabled_setting(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.live_preview_enabled = enabled;
+    settings::write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_live_preview_interval_setting(
+    app: AppHandle,
+    interval_ms: u32,
+) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.live_preview_interval_ms = interval_ms.clamp(1000, 4000); // 1s to 4s
+    settings::write_settings(&app, settings);
+    Ok(())
+}
+
+// === Whisper Mode Commands ===
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_whisper_mode_enabled_setting(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.whisper_mode_enabled = enabled;
+    settings::write_settings(&app, settings);
+
+    // Refresh the audio recorder to apply new VAD settings immediately
+    let audio_manager = app.state::<Arc<AudioRecordingManager>>();
+    if let Err(e) = audio_manager.refresh_vad_settings() {
+        error!("Failed to refresh VAD settings: {}", e);
+        // Don't fail the setting change - it will apply on next recording
+    }
+
+    // Notify frontend that whisper mode changed
+    let _ = app.emit("whisper-mode-changed", enabled);
+
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_vad_threshold_setting(app: AppHandle, threshold: f32) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.vad_threshold = threshold.clamp(0.05, 0.9); // Reasonable range for VAD threshold
+    settings::write_settings(&app, settings);
+
+    // Refresh the audio recorder to apply new VAD threshold
+    let audio_manager = app.state::<Arc<AudioRecordingManager>>();
+    if let Err(e) = audio_manager.refresh_vad_settings() {
+        error!("Failed to refresh VAD settings: {}", e);
+        // Don't fail the setting change - it will apply on next recording
+    }
+
     Ok(())
 }
 

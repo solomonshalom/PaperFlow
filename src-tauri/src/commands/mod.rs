@@ -1,8 +1,12 @@
 pub mod audio;
+pub mod diarization;
+pub mod export;
+pub mod file_transcription;
 pub mod history;
 pub mod meeting;
 pub mod models;
 pub mod transcription;
+pub mod watch_folder;
 
 use crate::settings::{get_settings, write_settings, AppSettings, LogLevel};
 use crate::utils::cancel_current_operation;

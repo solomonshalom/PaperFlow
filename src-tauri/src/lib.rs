@@ -23,10 +23,15 @@ use tauri_specta::{collect_commands, Builder};
 
 use env_filter::Builder as EnvFilterBuilder;
 use managers::audio::AudioRecordingManager;
+use managers::diarization::DiarizationManager;
+use managers::file_transcription::FileTranscriptionManager;
 use managers::history::HistoryManager;
+use managers::live_preview::LivePreviewManager;
 use managers::meeting::MeetingManager;
 use managers::model::ModelManager;
+use managers::system_audio::SystemAudioManager;
 use managers::transcription::TranscriptionManager;
+use managers::watch_folder::WatchFolderManager;
 #[cfg(unix)]
 use signal_hook::consts::SIGUSR2;
 #[cfg(unix)]
@@ -132,6 +137,26 @@ fn initialize_core_logic(app_handle: &AppHandle) {
         Arc::new(HistoryManager::new(app_handle).expect("Failed to initialize history manager"));
     let meeting_manager =
         Arc::new(MeetingManager::new(app_handle).expect("Failed to initialize meeting manager"));
+    let live_preview_manager = Arc::new(LivePreviewManager::new(
+        app_handle,
+        transcription_manager.clone(),
+    ));
+    let file_transcription_manager = Arc::new(
+        FileTranscriptionManager::new(app_handle, transcription_manager.clone())
+            .expect("Failed to initialize file transcription manager"),
+    );
+    let watch_folder_manager = Arc::new(
+        WatchFolderManager::new(app_handle).expect("Failed to initialize watch folder manager"),
+    );
+    let diarization_manager = Arc::new(
+        DiarizationManager::new(app_handle).expect("Failed to initialize diarization manager"),
+    );
+    let system_audio_manager = Arc::new(
+        SystemAudioManager::new(app_handle).expect("Failed to initialize system audio manager"),
+    );
+
+    // Wire up the live preview manager to the recording manager
+    recording_manager.set_live_preview_manager(live_preview_manager.clone());
 
     // Add managers to Tauri's managed state
     app_handle.manage(recording_manager.clone());
@@ -139,6 +164,16 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     app_handle.manage(transcription_manager.clone());
     app_handle.manage(history_manager.clone());
     app_handle.manage(meeting_manager.clone());
+    app_handle.manage(live_preview_manager.clone());
+    app_handle.manage(file_transcription_manager.clone());
+    app_handle.manage(watch_folder_manager.clone());
+    app_handle.manage(diarization_manager.clone());
+    app_handle.manage(system_audio_manager.clone());
+
+    // Start watching all enabled folders
+    if let Err(e) = watch_folder_manager.start_all() {
+        log::error!("Failed to start watch folders: {}", e);
+    }
 
     // Initialize the shortcuts
     shortcut::init_shortcuts(app_handle);
@@ -196,6 +231,10 @@ fn initialize_core_logic(app_handle: &AppHandle) {
                 cancel_current_operation(app);
             }
             "quit" => {
+                // Clean up watch folder manager before exit
+                if let Some(watch_manager) = app.try_state::<Arc<WatchFolderManager>>() {
+                    watch_manager.shutdown();
+                }
                 app.exit(0);
             }
             _ => {}
@@ -293,12 +332,17 @@ pub fn run() {
         shortcut::change_primary_language_setting,
         shortcut::change_secondary_language_setting,
         shortcut::change_language_detection_sensitivity_setting,
+        shortcut::change_show_meeting_menu_setting,
         shortcut::change_meeting_mode_enabled_setting,
         shortcut::change_meeting_chunk_duration_setting,
         shortcut::change_meeting_auto_summarize_setting,
         shortcut::change_meeting_extract_action_items_setting,
         shortcut::change_meeting_summary_prompt_setting,
         shortcut::change_meeting_action_items_prompt_setting,
+        shortcut::change_live_preview_enabled_setting,
+        shortcut::change_live_preview_interval_setting,
+        shortcut::change_whisper_mode_enabled_setting,
+        shortcut::change_vad_threshold_setting,
         commands::meeting::get_meeting_state,
         commands::meeting::get_current_meeting_session,
         commands::meeting::get_meeting_elapsed_seconds,
@@ -344,6 +388,15 @@ pub fn run() {
         commands::audio::set_clamshell_microphone,
         commands::audio::get_clamshell_microphone,
         commands::audio::is_recording,
+        commands::audio::get_system_audio_info,
+        commands::audio::is_native_system_audio_available,
+        commands::audio::start_system_audio_capture,
+        commands::audio::stop_system_audio_capture,
+        commands::audio::is_capturing_system_audio,
+        commands::diarization::get_diarization_status,
+        commands::diarization::change_diarization_enabled_setting,
+        commands::diarization::get_diarization_model_info,
+        commands::diarization::download_diarization_models,
         commands::transcription::set_model_unload_timeout,
         commands::transcription::get_model_load_status,
         commands::transcription::unload_model_manually,
@@ -353,6 +406,29 @@ pub fn run() {
         commands::history::delete_history_entry,
         commands::history::update_history_limit,
         commands::history::update_recording_retention_period,
+        commands::file_transcription::get_supported_file_extensions,
+        commands::file_transcription::queue_file_for_transcription,
+        commands::file_transcription::queue_files_for_transcription,
+        commands::file_transcription::process_next_file,
+        commands::file_transcription::process_all_files,
+        commands::file_transcription::cancel_file_transcription,
+        commands::file_transcription::cancel_file_transcription_job,
+        commands::file_transcription::get_file_transcription_jobs,
+        commands::file_transcription::get_file_transcription_job,
+        commands::file_transcription::clear_completed_file_jobs,
+        commands::file_transcription::remove_file_transcription_job,
+        commands::file_transcription::is_file_transcription_processing,
+        commands::export::export_transcript,
+        commands::export::export_transcript_to_file,
+        commands::export::get_export_file_extension,
+        commands::export::get_available_export_formats,
+        commands::watch_folder::get_watch_folders,
+        commands::watch_folder::add_watch_folder,
+        commands::watch_folder::remove_watch_folder,
+        commands::watch_folder::update_watch_folder,
+        commands::watch_folder::get_watch_folder_status,
+        commands::watch_folder::start_watch_folder,
+        commands::watch_folder::stop_watch_folder,
         helpers::clamshell::is_laptop,
     ]);
 
@@ -378,7 +454,7 @@ pub fn run() {
                 }),
                 // File logs respect the user's settings (stored in FILE_LOG_LEVEL atomic)
                 Target::new(TargetKind::LogDir {
-                    file_name: Some("handy".into()),
+                    file_name: Some("paperflow".into()),
                 })
                 .filter(|metadata| {
                     let file_level = FILE_LOG_LEVEL.load(Ordering::Relaxed);
@@ -404,6 +480,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_macos_permissions::init())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(

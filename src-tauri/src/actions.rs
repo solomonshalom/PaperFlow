@@ -4,6 +4,7 @@ use crate::audio_feedback::{play_feedback_sound, play_feedback_sound_blocking, S
 use crate::context::{categorize_app, get_active_app, is_developer_context, ToneStyle};
 use crate::managers::audio::AudioRecordingManager;
 use crate::managers::history::HistoryManager;
+use crate::managers::live_preview::LivePreviewManager;
 use crate::managers::transcription::TranscriptionManager;
 use crate::settings::{get_settings, AppSettings, DeveloperMode, APPLE_INTELLIGENCE_PROVIDER_ID};
 use crate::shortcut;
@@ -331,6 +332,11 @@ impl ShortcutAction for TranscribeAction {
         }
 
         if recording_started {
+            // Start live preview if enabled
+            if let Some(lpm) = app.try_state::<Arc<LivePreviewManager>>() {
+                lpm.start();
+            }
+
             // Dynamically register the cancel shortcut in a separate task to avoid deadlock
             shortcut::register_cancel_shortcut(app);
         }
@@ -344,6 +350,11 @@ impl ShortcutAction for TranscribeAction {
     fn stop(&self, app: &AppHandle, binding_id: &str, _shortcut_str: &str) {
         // Unregister the cancel shortcut when transcription stops
         shortcut::unregister_cancel_shortcut(app);
+
+        // Stop live preview
+        if let Some(lpm) = app.try_state::<Arc<LivePreviewManager>>() {
+            lpm.stop();
+        }
 
         let stop_time = Instant::now();
         debug!("TranscribeAction::stop called for binding: {}", binding_id);

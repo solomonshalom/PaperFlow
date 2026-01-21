@@ -237,7 +237,7 @@ impl SoundTheme {
     }
 }
 
-/* still handy for composing the initial JSON in the store ------------- */
+/* still useful for composing the initial JSON in the store ------------- */
 #[derive(Serialize, Deserialize, Debug, Clone, Type)]
 pub struct AppSettings {
     pub bindings: HashMap<String, ShortcutBinding>,
@@ -355,6 +355,8 @@ pub struct AppSettings {
     pub language_detection_sensitivity: f32,
     // === Meeting Mode ===
     #[serde(default)]
+    pub show_meeting_menu: bool,
+    #[serde(default)]
     pub meeting_mode_enabled: bool,
     #[serde(default = "default_meeting_chunk_duration")]
     pub meeting_chunk_duration_seconds: u32,
@@ -366,6 +368,22 @@ pub struct AppSettings {
     pub meeting_summary_prompt: String,
     #[serde(default = "default_meeting_action_items_prompt")]
     pub meeting_action_items_prompt: String,
+    // === Live Preview ===
+    #[serde(default)]
+    pub live_preview_enabled: bool,
+    #[serde(default = "default_live_preview_interval_ms")]
+    pub live_preview_interval_ms: u32,
+    // === Watch Folders ===
+    #[serde(default)]
+    pub watch_folders: Option<Vec<crate::managers::watch_folder::WatchFolderConfig>>,
+    // === Whisper Mode ===
+    #[serde(default)]
+    pub whisper_mode_enabled: bool,
+    #[serde(default = "default_vad_threshold")]
+    pub vad_threshold: f32,
+    // === Speaker Diarization ===
+    #[serde(default)]
+    pub diarization_enabled: bool,
 }
 
 fn default_model() -> String {
@@ -455,6 +473,14 @@ fn default_meeting_summary_prompt() -> String {
 
 fn default_meeting_action_items_prompt() -> String {
     "Extract all action items from the following meeting transcript. List each action item on a separate line with the responsible person if mentioned:\n\n${transcript}".to_string()
+}
+
+fn default_live_preview_interval_ms() -> u32 {
+    2000 // 2 seconds
+}
+
+fn default_vad_threshold() -> f32 {
+    0.3 // Normal VAD threshold, whisper mode uses 0.15
 }
 
 fn default_post_process_provider_id() -> String {
@@ -710,12 +736,19 @@ pub fn get_default_settings() -> AppSettings {
         primary_language: None,
         secondary_language: None,
         language_detection_sensitivity: default_language_detection_sensitivity(),
+        show_meeting_menu: false,
         meeting_mode_enabled: false,
         meeting_chunk_duration_seconds: default_meeting_chunk_duration(),
         meeting_auto_summarize: false,
         meeting_extract_action_items: false,
         meeting_summary_prompt: default_meeting_summary_prompt(),
         meeting_action_items_prompt: default_meeting_action_items_prompt(),
+        live_preview_enabled: false,
+        live_preview_interval_ms: default_live_preview_interval_ms(),
+        watch_folders: None,
+        whisper_mode_enabled: false,
+        vad_threshold: default_vad_threshold(),
+        diarization_enabled: false,
     }
 }
 

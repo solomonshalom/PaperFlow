@@ -219,7 +219,7 @@ impl HistoryManager {
         post_process_prompt: Option<String>,
     ) -> Result<()> {
         let timestamp = Utc::now().timestamp();
-        let file_name = format!("handy-{}.wav", timestamp);
+        let file_name = format!("paperflow-{}.wav", timestamp);
         let title = self.format_timestamp_title(timestamp);
 
         // Save WAV file
@@ -747,7 +747,7 @@ mod tests {
             "INSERT INTO transcription_history (file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
             params![
-                format!("handy-{}.wav", timestamp),
+                format!("paperflow-{}.wav", timestamp),
                 timestamp,
                 false,
                 format!("Recording {}", timestamp),

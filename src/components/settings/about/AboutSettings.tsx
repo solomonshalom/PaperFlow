@@ -28,7 +28,8 @@ export const AboutSettings: React.FC = () => {
 
   const handleDonateClick = async () => {
     try {
-      await openUrl("https://handy.computer/donate");
+      // TODO: Update donate URL for PaperFlow
+      await openUrl("https://github.com/solomonshalom/PaperFlow");
     } catch (error) {
       console.error("Failed to open donate link:", error);
     }
@@ -57,7 +58,9 @@ export const AboutSettings: React.FC = () => {
           <Button
             variant="secondary"
             size="md"
-            onClick={() => openUrl("https://github.com/cjpais/Handy")}
+            onClick={() =>
+              openUrl("https://github.com/solomonshalom/PaperFlow")
+            }
           >
             {t("settings.about.sourceCode.button")}
           </Button>
@@ -76,6 +79,36 @@ export const AboutSettings: React.FC = () => {
 
       <SettingsGroup title={t("settings.about.acknowledgments.title")}>
         <SettingContainer
+          title={t("settings.about.acknowledgments.handy.title")}
+          description={t("settings.about.acknowledgments.handy.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.handy.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.tauri.title")}
+          description={t("settings.about.acknowledgments.tauri.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.tauri.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.parakeet.title")}
+          description={t("settings.about.acknowledgments.parakeet.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.parakeet.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
           title={t("settings.about.acknowledgments.whisper.title")}
           description={t("settings.about.acknowledgments.whisper.description")}
           grouped={true}
@@ -83,6 +116,70 @@ export const AboutSettings: React.FC = () => {
         >
           <div className="text-sm text-mid-gray">
             {t("settings.about.acknowledgments.whisper.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.moonshine.title")}
+          description={t(
+            "settings.about.acknowledgments.moonshine.description",
+          )}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.moonshine.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.silero.title")}
+          description={t("settings.about.acknowledgments.silero.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.silero.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.groq.title")}
+          description={t("settings.about.acknowledgments.groq.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.groq.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.rust.title")}
+          description={t("settings.about.acknowledgments.rust.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.rust.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.react.title")}
+          description={t("settings.about.acknowledgments.react.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.react.details")}
+          </div>
+        </SettingContainer>
+        <SettingContainer
+          title={t("settings.about.acknowledgments.community.title")}
+          description={t(
+            "settings.about.acknowledgments.community.description",
+          )}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="text-sm text-mid-gray">
+            {t("settings.about.acknowledgments.community.details")}
           </div>
         </SettingContainer>
       </SettingsGroup>

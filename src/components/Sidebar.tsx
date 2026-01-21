@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import {
   Cog,
-  FlaskConical,
   History,
   Info,
   Sparkles,
@@ -11,9 +10,10 @@ import {
   MessageSquare,
   Code,
   Users,
+  FileAudio,
 } from "lucide-react";
-import HandyTextLogo from "./icons/HandyTextLogo";
-import HandyHand from "./icons/HandyHand";
+import PaperFlowTextLogo from "./icons/PaperFlowTextLogo";
+import PaperFlowHand from "./icons/PaperFlowHand";
 import { useSettings } from "../hooks/useSettings";
 import {
   GeneralSettings,
@@ -23,10 +23,10 @@ import {
   ToneSettings,
   DeveloperSettings,
   HistorySettings,
-  DebugSettings,
   AboutSettings,
   PostProcessingSettings,
   MeetingSettings,
+  FileTranscriptionSettings,
 } from "./settings";
 
 export type SidebarSection = keyof typeof SECTIONS_CONFIG;
@@ -49,8 +49,14 @@ interface SectionConfig {
 export const SECTIONS_CONFIG = {
   general: {
     labelKey: "sidebar.general",
-    icon: HandyHand,
+    icon: PaperFlowHand,
     component: GeneralSettings,
+    enabled: () => true,
+  },
+  files: {
+    labelKey: "sidebar.files",
+    icon: FileAudio,
+    component: FileTranscriptionSettings,
     enabled: () => true,
   },
   advanced: {
@@ -93,18 +99,12 @@ export const SECTIONS_CONFIG = {
     labelKey: "sidebar.meeting",
     icon: Users,
     component: MeetingSettings,
-    enabled: (settings) => settings?.meeting_mode_enabled ?? false,
+    enabled: (settings) => settings?.show_meeting_menu ?? false,
   },
   history: {
     labelKey: "sidebar.history",
     icon: History,
     component: HistorySettings,
-    enabled: () => true,
-  },
-  debug: {
-    labelKey: "sidebar.debug",
-    icon: FlaskConical,
-    component: DebugSettings,
     enabled: () => true,
   },
   about: {
@@ -133,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="flex flex-col w-40 h-full border-r border-mid-gray/20 items-center px-2">
-      <HandyTextLogo width={120} className="m-4" />
+      <PaperFlowTextLogo width={120} className="m-4" />
       <div className="flex flex-col w-full items-center gap-1 pt-2 border-t border-mid-gray/20">
         {availableSections.map((section) => {
           const Icon = section.icon;

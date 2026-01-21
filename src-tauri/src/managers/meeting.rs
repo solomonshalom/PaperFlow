@@ -487,10 +487,8 @@ impl MeetingManager {
 
             // Transcribe this chunk using spawn_blocking to avoid blocking async runtime
             let tm_clone = Arc::clone(&*tm);
-            let transcription_result = tokio::task::spawn_blocking(move || {
-                tm_clone.transcribe(chunk_audio)
-            })
-            .await;
+            let transcription_result =
+                tokio::task::spawn_blocking(move || tm_clone.transcribe(chunk_audio)).await;
 
             match transcription_result {
                 Ok(Ok(transcription)) => {
@@ -586,7 +584,10 @@ impl MeetingManager {
 
         // Handle case where no chunks were successfully transcribed
         if full_transcript.is_empty() {
-            warn!("No transcript generated for meeting {} - all chunks failed", meeting_id);
+            warn!(
+                "No transcript generated for meeting {} - all chunks failed",
+                meeting_id
+            );
             // Still save to history so user knows meeting was attempted
             self.save_meeting_to_history(&session);
             self.reset_to_idle();

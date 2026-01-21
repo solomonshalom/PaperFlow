@@ -159,6 +159,8 @@ const settingUpdaters: {
     commands.changeSecondaryLanguageSetting(value as string | null),
   language_detection_sensitivity: (value) =>
     commands.changeLanguageDetectionSensitivitySetting(value as number),
+  show_meeting_menu: (value) =>
+    commands.changeShowMeetingMenuSetting(value as boolean),
   meeting_mode_enabled: (value) =>
     commands.changeMeetingModeEnabledSetting(value as boolean),
   meeting_chunk_duration_seconds: (value) =>
@@ -171,6 +173,16 @@ const settingUpdaters: {
     commands.changeMeetingSummaryPromptSetting(value as string),
   meeting_action_items_prompt: (value) =>
     commands.changeMeetingActionItemsPromptSetting(value as string),
+  live_preview_enabled: (value) =>
+    commands.changeLivePreviewEnabledSetting(value as boolean),
+  live_preview_interval_ms: (value) =>
+    commands.changeLivePreviewIntervalSetting(value as number),
+  whisper_mode_enabled: (value) =>
+    commands.changeWhisperModeEnabledSetting(value as boolean),
+  vad_threshold: (value) =>
+    commands.changeVadThresholdSetting(value as number),
+  diarization_enabled: (value) =>
+    commands.changeDiarizationEnabledSetting(value as boolean),
 };
 
 export const useSettingsStore = create<SettingsStore>()(

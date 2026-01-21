@@ -1,6 +1,11 @@
 pub mod audio;
+pub mod diarization;
+pub mod file_transcription;
 pub mod history;
+pub mod live_preview;
 pub mod meeting;
 pub mod model;
 pub mod snippets;
+pub mod system_audio;
 pub mod transcription;
+pub mod watch_folder;

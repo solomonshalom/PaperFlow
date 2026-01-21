@@ -1,4 +1,5 @@
 use crate::managers::audio::AudioRecordingManager;
+use crate::managers::live_preview::LivePreviewManager;
 use crate::managers::meeting::{MeetingManager, MeetingState};
 use crate::managers::transcription::TranscriptionManager;
 use crate::shortcut;
@@ -38,6 +39,11 @@ pub fn cancel_current_operation(app: &AppHandle) {
                 warn!("Failed to cancel meeting: {}", e);
             }
         }
+    }
+
+    // Stop live preview if active
+    if let Some(lpm) = app.try_state::<Arc<LivePreviewManager>>() {
+        lpm.stop();
     }
 
     // Cancel any ongoing recording

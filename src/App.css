@@ -76,3 +76,13 @@
   stroke: var(--color-logo-stroke);
   stroke-width: 1;
 }
+
+/* Hidden scrollbar - still scrollable */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

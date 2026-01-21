@@ -1,11 +1,11 @@
 [package]
-name = "handy"
-version = "0.6.11"
+name = "paperflow"
+version = "0.1.0"
 description = "PaperFlow"
 authors = ["cjpais"]
 edition = "2021"
 license = "MIT"
-default-run = "handy"
+default-run = "paperflow"
 
 [profile.dev]
 incremental = true # Compile your binary in smaller steps.
@@ -16,7 +16,7 @@ incremental = true # Compile your binary in smaller steps.
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "handy_app_lib"
+name = "paperflow_app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 # [[bin]]
@@ -38,6 +38,7 @@ tauri = { version = "2.9.1", features = [
 ] }
 tauri-plugin-log = "2.7.1"
 tauri-plugin-opener = "2.5.2"
+tauri-plugin-dialog = "2.2.0"
 tauri-plugin-store = "2.4.1"
 tauri-plugin-os = "2.3.2"
 tauri-plugin-clipboard-manager = "2.3.2"
@@ -71,9 +72,15 @@ tar = "0.4.44"
 flate2 = "1.0"
 transcribe-rs = { version = "0.2.2", features = ["whisper", "parakeet", "moonshine"] }
 ferrous-opencc = "0.2.3"
+symphonia = { version = "0.5", features = ["mp3", "aac", "ogg", "flac", "wav", "pcm"] }
 specta = "=2.0.0-rc.22"
 specta-typescript = "0.0.9"
 tauri-specta = { version = "=2.0.0-rc.21", features = ["derive", "typescript"] }
+notify = { version = "6.1", default-features = false, features = ["macos_fsevent"] }
+docx-rs = "0.4"
+genpdf = "0.2"
+# Speaker diarization using pyannote (more accurate, no speaker limit)
+pyannote-rs = "0.3"
 
 [target.'cfg(unix)'.dependencies]
 signal-hook = "0.3"
@@ -87,7 +94,9 @@ tauri-plugin-updater = "2.9.0"
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.61.3", features = [
   "Win32_Media_Audio_Endpoints",
+  "Win32_Media_Audio",
   "Win32_System_Com_StructuredStorage",
+  "Win32_System_Com",
   "Win32_System_Variant",
   "Win32_Foundation",
   "Win32_UI_WindowsAndMessaging",
@@ -95,6 +104,16 @@ windows = { version = "0.61.3", features = [
 
 [target.'cfg(target_os = "macos")'.dependencies]
 tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.1" }
+# Native system audio capture via ScreenCaptureKit (macOS 14.2+)
+screencapturekit = "1.5"
+# macOS system info for version checking
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSProcessInfo"] }
+
+[dev-dependencies]
+mockall = "0.13"
+tokio = { version = "1.43.0", features = ["rt", "macros", "rt-multi-thread"] }
+approx = "0.5"
 
 [profile.release]
 lto = true

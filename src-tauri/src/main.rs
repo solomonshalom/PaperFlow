@@ -12,5 +12,5 @@ fn main() {
         }
     }
 
-    handy_app_lib::run()
+    paperflow_app_lib::run()
 }

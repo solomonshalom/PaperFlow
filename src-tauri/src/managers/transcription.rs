@@ -3,6 +3,7 @@ use crate::audio_toolkit::{
     FormattingRules,
 };
 use crate::groq_transcription;
+use crate::managers::diarization::DiarizationManager;
 use crate::managers::model::{EngineType, ModelManager};
 use crate::managers::snippets::apply_snippets;
 use crate::settings::{get_settings, ModelUnloadTimeout};
@@ -13,7 +14,7 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Condvar, Mutex};
 use std::thread;
 use std::time::{Duration, SystemTime};
-use tauri::{AppHandle, Emitter};
+use tauri::{AppHandle, Emitter, Manager};
 use tokio::runtime::Handle;
 use transcribe_rs::{
     engines::{
@@ -406,6 +407,13 @@ impl TranscriptionManager {
         // Get current settings for configuration
         let settings = get_settings(&self.app_handle);
 
+        // Clone audio for diarization if enabled (before transcription consumes it)
+        let audio_for_diarization = if settings.diarization_enabled {
+            Some(audio.clone())
+        } else {
+            None
+        };
+
         // Perform transcription with the appropriate engine
         let result = {
             let mut engine_guard = self.engine.lock().unwrap();
@@ -523,15 +531,129 @@ impl TranscriptionManager {
             }
         };
 
+        // Apply speaker diarization if enabled and audio is available
+        let diarized_text = if let Some(audio_samples) = audio_for_diarization {
+            info!("Diarization enabled, attempting to run speaker diarization...");
+            // Try to get the diarization manager and run diarization
+            if let Some(dm) = self.app_handle.try_state::<Arc<DiarizationManager>>() {
+                info!(
+                    "Got diarization manager, is_available: {}",
+                    dm.is_available()
+                );
+                if dm.is_available() {
+                    info!(
+                        "Running speaker diarization on {} samples...",
+                        audio_samples.len()
+                    );
+                    match dm.diarize(&audio_samples) {
+                        Ok(diarization_segments) => {
+                            info!(
+                                "Diarization returned {} segments",
+                                diarization_segments.len()
+                            );
+                            if !diarization_segments.is_empty() {
+                                // Check if we have transcription segments with timestamps
+                                info!("Transcription has segments: {}", result.segments.is_some());
+                                if let Some(ref segments) = result.segments {
+                                    // Convert transcription segments to the format expected by diarization
+                                    let transcription_segments: Vec<(u64, u64, String)> = segments
+                                        .iter()
+                                        .map(|s| {
+                                            (
+                                                (s.start * 1000.0) as u64,
+                                                (s.end * 1000.0) as u64,
+                                                s.text.clone(),
+                                            )
+                                        })
+                                        .collect();
+
+                                    // Assign speakers to transcription segments
+                                    let labeled_segments =
+                                        DiarizationManager::assign_speakers_to_segments(
+                                            &transcription_segments,
+                                            &diarization_segments,
+                                        );
+
+                                    // Format output with speaker labels
+                                    let mut formatted_output = String::new();
+                                    let mut last_speaker: Option<String> = None;
+
+                                    for (_start, _end, text, speaker) in labeled_segments {
+                                        let current_speaker =
+                                            speaker.unwrap_or_else(|| "Unknown".to_string());
+
+                                        // Only add speaker label when speaker changes
+                                        if last_speaker.as_ref() != Some(&current_speaker) {
+                                            if !formatted_output.is_empty() {
+                                                formatted_output.push('\n');
+                                            }
+                                            formatted_output
+                                                .push_str(&format!("[{}]: ", current_speaker));
+                                            last_speaker = Some(current_speaker);
+                                        }
+
+                                        formatted_output.push_str(&text);
+                                    }
+
+                                    debug!(
+                                        "Diarization applied: {} speakers detected",
+                                        diarization_segments
+                                            .iter()
+                                            .map(|s| s.speaker.clone())
+                                            .collect::<std::collections::HashSet<_>>()
+                                            .len()
+                                    );
+                                    Some(formatted_output)
+                                } else {
+                                    // No transcription segments - apply diarization to the whole text
+                                    // Just prepend the dominant speaker
+                                    if let Some(first_segment) = diarization_segments.first() {
+                                        debug!("No transcription segments, using first diarization speaker");
+                                        Some(format!(
+                                            "[{}]: {}",
+                                            first_segment.speaker, result.text
+                                        ))
+                                    } else {
+                                        None
+                                    }
+                                }
+                            } else {
+                                debug!("No diarization segments found (audio may be too short)");
+                                None
+                            }
+                        }
+                        Err(e) => {
+                            warn!(
+                                "Diarization failed: {}. Continuing without speaker labels.",
+                                e
+                            );
+                            None
+                        }
+                    }
+                } else {
+                    debug!("Diarization manager not available");
+                    None
+                }
+            } else {
+                debug!("Diarization manager not found in app state");
+                None
+            }
+        } else {
+            None
+        };
+
+        // Use diarized text if available, otherwise use original transcription
+        let text_for_processing = diarized_text.unwrap_or(result.text);
+
         // Apply word correction if custom words are configured
         let corrected_result = if !settings.custom_words.is_empty() {
             apply_custom_words(
-                &result.text,
+                &text_for_processing,
                 &settings.custom_words,
                 settings.word_correction_threshold,
             )
         } else {
-            result.text
+            text_for_processing
         };
 
         // Filter out filler words and hallucinations
@@ -585,6 +707,151 @@ impl TranscriptionManager {
         self.maybe_unload_immediately("transcription");
 
         Ok(final_result)
+    }
+
+    /// Check if the current model is a cloud-based model (requires network)
+    pub fn is_cloud_model(&self) -> bool {
+        match self.engine.try_lock() {
+            Ok(guard) => matches!(guard.as_ref(), Some(LoadedEngine::GroqCloud { .. })),
+            Err(_) => false, // Assume local if we can't check
+        }
+    }
+
+    /// Transcribe audio for live preview (skips post-processing for speed)
+    ///
+    /// This method is designed for real-time preview during recording.
+    /// It skips custom word correction, filtering, and other post-processing
+    /// to minimize latency.
+    ///
+    /// IMPORTANT: This method uses try_lock to avoid blocking the main transcription.
+    /// If the engine is busy, it returns an error immediately rather than waiting.
+    pub fn transcribe_partial(&self, audio: Vec<f32>) -> Result<String> {
+        // Update last activity timestamp
+        self.last_activity.store(
+            SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_millis() as u64,
+            Ordering::Relaxed,
+        );
+
+        if audio.is_empty() {
+            return Ok(String::new());
+        }
+
+        // Use try_lock to avoid blocking the main transcription
+        // If the engine is busy (e.g., final transcription starting), skip this preview
+        let mut engine_guard = self
+            .engine
+            .try_lock()
+            .map_err(|_| anyhow::anyhow!("Engine busy - skipping preview transcription"))?;
+
+        let engine = engine_guard
+            .as_mut()
+            .ok_or_else(|| anyhow::anyhow!("Model not loaded for partial transcription"))?;
+
+        // Get current settings for language configuration
+        let settings = get_settings(&self.app_handle);
+
+        // Perform transcription with the appropriate engine
+        let result = match engine {
+            LoadedEngine::Whisper(whisper_engine) => {
+                let whisper_language = if settings.multilingual_mode_enabled {
+                    None
+                } else if settings.selected_language == "auto" {
+                    None
+                } else {
+                    let normalized = if settings.selected_language == "zh-Hans"
+                        || settings.selected_language == "zh-Hant"
+                    {
+                        "zh".to_string()
+                    } else {
+                        settings.selected_language.clone()
+                    };
+                    Some(normalized)
+                };
+
+                let params = WhisperInferenceParams {
+                    language: whisper_language,
+                    translate: false, // Skip translation for speed
+                    ..Default::default()
+                };
+
+                whisper_engine
+                    .transcribe_samples(audio, Some(params))
+                    .map_err(|e| anyhow::anyhow!("Whisper partial transcription failed: {}", e))?
+            }
+            LoadedEngine::Parakeet(parakeet_engine) => {
+                let params = ParakeetInferenceParams {
+                    timestamp_granularity: TimestampGranularity::Segment,
+                    ..Default::default()
+                };
+                parakeet_engine
+                    .transcribe_samples(audio, Some(params))
+                    .map_err(|e| anyhow::anyhow!("Parakeet partial transcription failed: {}", e))?
+            }
+            LoadedEngine::Moonshine(moonshine_engine) => moonshine_engine
+                .transcribe_samples(audio, None)
+                .map_err(|e| anyhow::anyhow!("Moonshine partial transcription failed: {}", e))?,
+            LoadedEngine::GroqCloud { model_id } => {
+                // Cloud transcription for partial preview
+                let api_key = settings.groq_transcription_api_key.clone();
+                let language = if settings.multilingual_mode_enabled {
+                    None
+                } else if settings.selected_language == "auto" {
+                    None
+                } else {
+                    Some(settings.selected_language.clone())
+                };
+                let model_id_clone = model_id.clone();
+
+                // Drop the engine lock before making network request
+                // This allows final transcription to proceed if user stops recording
+                drop(engine_guard);
+
+                // Handle both tokio and non-tokio thread contexts
+                let result = if let Ok(handle) = Handle::try_current() {
+                    // We're in a tokio context, use block_in_place
+                    tokio::task::block_in_place(|| {
+                        handle.block_on(async {
+                            groq_transcription::transcribe(
+                                &api_key,
+                                &model_id_clone,
+                                &audio,
+                                language.as_deref(),
+                            )
+                            .await
+                        })
+                    })
+                } else {
+                    // Not in tokio context (e.g., live preview worker thread)
+                    // Create a temporary runtime for this request
+                    let rt = tokio::runtime::Builder::new_current_thread()
+                        .enable_all()
+                        .build()
+                        .map_err(|e| anyhow::anyhow!("Failed to create runtime: {}", e))?;
+
+                    rt.block_on(async {
+                        groq_transcription::transcribe(
+                            &api_key,
+                            &model_id_clone,
+                            &audio,
+                            language.as_deref(),
+                        )
+                        .await
+                    })
+                };
+
+                let text = result.map_err(|e| {
+                    anyhow::anyhow!("Groq cloud partial transcription failed: {}", e)
+                })?;
+
+                return Ok(text.trim().to_string());
+            }
+        };
+
+        // Return raw text without post-processing for speed
+        Ok(result.text.trim().to_string())
     }
 }
 

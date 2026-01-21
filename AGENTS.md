@@ -36,12 +36,12 @@ bun run preview    # Preview built frontend
 mkdir -p src-tauri/resources/models
 
 # Download required VAD model
-curl -o src-tauri/resources/models/silero_vad_v4.onnx https://blob.handy.computer/silero_vad_v4.onnx
+curl -o src-tauri/resources/models/silero_vad_v4.onnx https://huggingface.co/onnx-community/silero-vad/resolve/main/silero_vad_v4.onnx
 ```
 
 ## Architecture Overview
 
-Handy is a cross-platform desktop speech-to-text application built with Tauri (Rust backend + React/TypeScript frontend).
+PaperFlow is a cross-platform desktop speech-to-text application built with Tauri (Rust backend + React/TypeScript frontend).
 
 ### Core Components
 

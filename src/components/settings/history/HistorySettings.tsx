@@ -7,6 +7,7 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { commands, type HistoryEntry } from "@/bindings";
 import { formatDateTime } from "@/utils/dateFormat";
+import { ExportDropdown } from "../files/ExportDropdown";
 
 interface OpenRecordingsButtonProps {
   onClick: () => void;
@@ -250,24 +251,28 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
     <div className="px-4 py-2 pb-5 flex flex-col gap-3">
       <div className="flex justify-between items-center">
         <p className="text-sm font-medium">{formattedDate}</p>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <button
             onClick={handleCopyText}
-            className="text-text/50 hover:text-logo-primary  hover:border-logo-primary transition-colors cursor-pointer"
+            className="p-1.5 text-text/40 hover:text-logo-primary transition-colors rounded hover:bg-logo-primary/10"
             title={t("settings.history.copyToClipboard")}
           >
             {showCopied ? (
-              <Check width={16} height={16} />
+              <Check className="w-4 h-4" />
             ) : (
-              <Copy width={16} height={16} />
+              <Copy className="w-4 h-4" />
             )}
           </button>
+          <ExportDropdown
+            text={entry.transcription_text}
+            title={entry.title || formattedDate}
+          />
           <button
             onClick={onToggleSaved}
-            className={`p-2 rounded  transition-colors cursor-pointer ${
+            className={`p-1.5 rounded transition-colors ${
               entry.saved
-                ? "text-logo-primary hover:text-logo-primary/80"
-                : "text-text/50 hover:text-logo-primary"
+                ? "text-logo-primary hover:text-logo-primary/80 hover:bg-logo-primary/10"
+                : "text-text/40 hover:text-logo-primary hover:bg-logo-primary/10"
             }`}
             title={
               entry.saved
@@ -276,17 +281,16 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
             }
           >
             <Star
-              width={16}
-              height={16}
+              className="w-4 h-4"
               fill={entry.saved ? "currentColor" : "none"}
             />
           </button>
           <button
             onClick={handleDeleteEntry}
-            className="text-text/50 hover:text-logo-primary transition-colors cursor-pointer"
+            className="p-1.5 text-text/40 hover:text-red-400 transition-colors rounded hover:bg-red-500/10"
             title={t("settings.history.delete")}
           >
-            <Trash2 width={16} height={16} />
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </div>

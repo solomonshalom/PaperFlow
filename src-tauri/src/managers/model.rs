@@ -76,7 +76,10 @@ impl ModelManager {
                 name: "Whisper Small".to_string(),
                 description: "Fast and fairly accurate.".to_string(),
                 filename: "ggml-small.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-small.bin".to_string()),
+                url: Some(
+                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+                        .to_string(),
+                ),
                 size_mb: 487,
                 is_downloaded: false,
                 is_downloading: false,
@@ -96,7 +99,10 @@ impl ModelManager {
                 name: "Whisper Medium".to_string(),
                 description: "Good accuracy, medium speed".to_string(),
                 filename: "whisper-medium-q4_1.bin".to_string(),
-                url: Some("https://blob.handy.computer/whisper-medium-q4_1.bin".to_string()),
+                url: Some(
+                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin"
+                        .to_string(),
+                ),
                 size_mb: 492, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,
@@ -115,7 +121,7 @@ impl ModelManager {
                 name: "Whisper Turbo".to_string(),
                 description: "Balanced accuracy and speed.".to_string(),
                 filename: "ggml-large-v3-turbo.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-large-v3-turbo.bin".to_string()),
+                url: Some("https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin".to_string()),
                 size_mb: 1600, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,
@@ -134,7 +140,7 @@ impl ModelManager {
                 name: "Whisper Large".to_string(),
                 description: "Good accuracy, but slow.".to_string(),
                 filename: "ggml-large-v3-q5_0.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-large-v3-q5_0.bin".to_string()),
+                url: Some("https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-q5_0.bin".to_string()),
                 size_mb: 1100, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,

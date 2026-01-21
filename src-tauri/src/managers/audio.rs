@@ -1,5 +1,6 @@
 use crate::audio_toolkit::{list_input_devices, vad::SmoothedVad, AudioRecorder, SileroVad};
 use crate::helpers::clamshell;
+use crate::managers::live_preview::LivePreviewManager;
 use crate::settings::{get_settings, AppSettings};
 use crate::utils;
 use log::{debug, error, info};
@@ -117,14 +118,31 @@ pub enum MicrophoneMode {
 fn create_audio_recorder(
     vad_path: &str,
     app_handle: &tauri::AppHandle,
+    live_preview_manager: Option<Arc<LivePreviewManager>>,
 ) -> Result<AudioRecorder, anyhow::Error> {
-    let silero = SileroVad::new(vad_path, 0.3)
+    let settings = get_settings(app_handle);
+
+    // Configure VAD parameters based on whisper mode
+    let (threshold, prefill, hangover, onset) = if settings.whisper_mode_enabled {
+        // Whisper mode: lower threshold for quiet speech, more buffer for better detection
+        (0.15, 25, 25, 1)
+    } else {
+        // Normal mode: use configured threshold or default
+        (settings.vad_threshold, 15, 15, 2)
+    };
+
+    debug!(
+        "Creating audio recorder with VAD threshold={}, prefill={}, hangover={}, onset={} (whisper_mode={})",
+        threshold, prefill, hangover, onset, settings.whisper_mode_enabled
+    );
+
+    let silero = SileroVad::new(vad_path, threshold)
         .map_err(|e| anyhow::anyhow!("Failed to create SileroVad: {}", e))?;
-    let smoothed_vad = SmoothedVad::new(Box::new(silero), 15, 15, 2);
+    let smoothed_vad = SmoothedVad::new(Box::new(silero), prefill, hangover, onset);
 
     // Recorder with VAD plus a spectrum-level callback that forwards updates to
     // the frontend.
-    let recorder = AudioRecorder::new()
+    let mut recorder = AudioRecorder::new()
         .map_err(|e| anyhow::anyhow!("Failed to create AudioRecorder: {}", e))?
         .with_vad(Box::new(smoothed_vad))
         .with_level_callback({
@@ -133,6 +151,13 @@ fn create_audio_recorder(
                 utils::emit_levels(&app_handle, &levels);
             }
         });
+
+    // Add audio callback for live preview if manager is provided
+    if let Some(lpm) = live_preview_manager {
+        recorder = recorder.with_audio_callback(move |samples| {
+            lpm.push_audio(samples);
+        });
+    }
 
     Ok(recorder)
 }
@@ -149,6 +174,7 @@ pub struct AudioRecordingManager {
     is_open: Arc<Mutex<bool>>,
     is_recording: Arc<Mutex<bool>>,
     did_mute: Arc<Mutex<bool>>,
+    live_preview_manager: Arc<Mutex<Option<Arc<LivePreviewManager>>>>,
 }
 
 impl AudioRecordingManager {
@@ -171,6 +197,7 @@ impl AudioRecordingManager {
             is_open: Arc::new(Mutex::new(false)),
             is_recording: Arc::new(Mutex::new(false)),
             did_mute: Arc::new(Mutex::new(false)),
+            live_preview_manager: Arc::new(Mutex::new(None)),
         };
 
         // Always-on?  Open immediately.
@@ -179,6 +206,11 @@ impl AudioRecordingManager {
         }
 
         Ok(manager)
+    }
+
+    /// Set the LivePreviewManager for streaming audio during recording
+    pub fn set_live_preview_manager(&self, lpm: Arc<LivePreviewManager>) {
+        *self.live_preview_manager.lock().unwrap() = Some(lpm);
     }
 
     /* ---------- helper methods --------------------------------------------- */
@@ -258,9 +290,11 @@ impl AudioRecordingManager {
         let mut recorder_opt = self.recorder.lock().unwrap();
 
         if recorder_opt.is_none() {
+            let lpm = self.live_preview_manager.lock().unwrap().clone();
             *recorder_opt = Some(create_audio_recorder(
                 vad_path.to_str().unwrap(),
                 &self.app_handle,
+                lpm,
             )?);
         }
 
@@ -403,6 +437,35 @@ impl AudioRecordingManager {
             self.stop_microphone_stream();
             self.start_microphone_stream()?;
         }
+        Ok(())
+    }
+
+    /// Recreate the audio recorder to apply new VAD settings (e.g., whisper mode)
+    /// This clears the cached recorder so it will be recreated with updated settings
+    pub fn refresh_vad_settings(&self) -> Result<(), anyhow::Error> {
+        let is_open = *self.is_open.lock().unwrap();
+        let is_recording = *self.is_recording.lock().unwrap();
+
+        // Don't refresh while actively recording - user will need to wait
+        if is_recording {
+            debug!("Cannot refresh VAD settings while recording, will apply on next recording");
+            // Clear the recorder so it gets recreated next time
+            *self.recorder.lock().unwrap() = None;
+            return Ok(());
+        }
+
+        // Clear the cached recorder
+        *self.recorder.lock().unwrap() = None;
+
+        // If the microphone stream was open (always-on mode), restart it
+        if is_open {
+            self.stop_microphone_stream();
+            self.start_microphone_stream()?;
+            info!("VAD settings refreshed and microphone stream restarted");
+        } else {
+            info!("VAD settings cleared, will apply on next recording");
+        }
+
         Ok(())
     }
 
