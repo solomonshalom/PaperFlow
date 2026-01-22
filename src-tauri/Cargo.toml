@@ -1,6 +1,6 @@
 [package]
 name = "paperflow"
-version = "0.1.0"
+version = "2.0.0"
 description = "PaperFlow"
 authors = ["cjpais"]
 edition = "2021"
