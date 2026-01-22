@@ -409,15 +409,16 @@ impl ShortcutAction for TranscribeAction {
                             if let Some(converted_text) =
                                 maybe_convert_chinese_variant(&settings, &transcription).await
                             {
-                                final_text = converted_text.clone();
-                                post_processed_text = Some(converted_text);
+                                final_text = converted_text;
                             }
+
                             // Then apply regular post-processing if enabled
-                            else if let Some(processed_text) =
-                                maybe_post_process_transcription(&settings, &transcription).await
+                            // Note: Post-processing now uses final_text (which may be Chinese-converted)
+                            if let Some(processed_text) =
+                                maybe_post_process_transcription(&settings, &final_text).await
                             {
-                                final_text = processed_text.clone();
-                                post_processed_text = Some(processed_text);
+                                post_processed_text = Some(processed_text.clone());
+                                final_text = processed_text;
 
                                 // Get the prompt that was used
                                 if let Some(prompt_id) = &settings.post_process_selected_prompt_id {
@@ -429,6 +430,9 @@ impl ShortcutAction for TranscribeAction {
                                         post_process_prompt = Some(prompt.prompt.clone());
                                     }
                                 }
+                            } else if final_text != transcription {
+                                // Chinese conversion happened but no post-processing
+                                post_processed_text = Some(final_text.clone());
                             }
 
                             // Save to history with post-processed text and prompt
