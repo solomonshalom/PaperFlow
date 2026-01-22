@@ -1,6 +1,7 @@
 # PaperFlow
 
 Local speech-to-text for your desktop. Fast, private, offline.
+<img width="1267" height="726" alt="image" src="https://github.com/user-attachments/assets/6853f672-7028-4c7b-8565-c994511a8ac4" />
 
 ## Install
 
