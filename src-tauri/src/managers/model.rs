@@ -37,6 +37,15 @@ pub struct ModelInfo {
     pub engine_type: EngineType,
     pub accuracy_score: f32, // 0.0 to 1.0, higher is more accurate
     pub speed_score: f32,    // 0.0 to 1.0, higher is faster
+    // CoreML fields (macOS only)
+    #[serde(default)]
+    pub coreml_url: Option<String>,
+    #[serde(default)]
+    pub coreml_size_mb: u64,
+    #[serde(default)]
+    pub is_coreml_downloaded: bool,
+    #[serde(default)]
+    pub is_coreml_downloading: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
@@ -88,6 +97,14 @@ impl ModelManager {
                 engine_type: EngineType::Whisper,
                 accuracy_score: 0.60,
                 speed_score: 0.85,
+                // CoreML model for Apple Neural Engine acceleration
+                coreml_url: Some(
+                    "https://huggingface.co/aarush67/whisper-coreml-models/resolve/main/ggml-small-encoder.mlmodelc.tar.gz"
+                        .to_string(),
+                ),
+                coreml_size_mb: 150,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -111,6 +128,14 @@ impl ModelManager {
                 engine_type: EngineType::Whisper,
                 accuracy_score: 0.75,
                 speed_score: 0.60,
+                // CoreML model for Apple Neural Engine acceleration
+                coreml_url: Some(
+                    "https://huggingface.co/aarush67/whisper-coreml-models/resolve/main/ggml-medium-encoder.mlmodelc.tar.gz"
+                        .to_string(),
+                ),
+                coreml_size_mb: 350,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -130,6 +155,14 @@ impl ModelManager {
                 engine_type: EngineType::Whisper,
                 accuracy_score: 0.80,
                 speed_score: 0.40,
+                // CoreML model for Apple Neural Engine acceleration
+                coreml_url: Some(
+                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo-encoder.mlmodelc.zip"
+                        .to_string(),
+                ),
+                coreml_size_mb: 500,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -149,6 +182,14 @@ impl ModelManager {
                 engine_type: EngineType::Whisper,
                 accuracy_score: 0.85,
                 speed_score: 0.30,
+                // CoreML model for Apple Neural Engine acceleration
+                coreml_url: Some(
+                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-encoder.mlmodelc.zip"
+                        .to_string(),
+                ),
+                coreml_size_mb: 600,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -169,6 +210,11 @@ impl ModelManager {
                 engine_type: EngineType::Parakeet,
                 accuracy_score: 0.85,
                 speed_score: 0.85,
+                // CoreML not supported for Parakeet
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -188,6 +234,11 @@ impl ModelManager {
                 engine_type: EngineType::Parakeet,
                 accuracy_score: 0.80,
                 speed_score: 0.85,
+                // CoreML not supported for Parakeet
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -207,6 +258,11 @@ impl ModelManager {
                 engine_type: EngineType::Moonshine,
                 accuracy_score: 0.70,
                 speed_score: 0.90,
+                // CoreML not supported for Moonshine
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -227,6 +283,11 @@ impl ModelManager {
                 engine_type: EngineType::GroqCloud,
                 accuracy_score: 0.95,
                 speed_score: 0.80,
+                // Cloud models don't use CoreML
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -246,6 +307,37 @@ impl ModelManager {
                 engine_type: EngineType::GroqCloud,
                 accuracy_score: 0.90,
                 speed_score: 0.95,
+                // Cloud models don't use CoreML
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
+            },
+        );
+
+        // Groq Distil-Whisper model (fastest, English-only)
+        available_models.insert(
+            "groq-distil-whisper-large-v3-en".to_string(),
+            ModelInfo {
+                id: "groq-distil-whisper-large-v3-en".to_string(),
+                name: "Groq Distil-Whisper".to_string(),
+                description: "Cloud API. Fastest model, English only. Requires Groq API key."
+                    .to_string(),
+                filename: "".to_string(), // No local file
+                url: None,                // No download URL
+                size_mb: 0,               // Cloud-based
+                is_downloaded: true,      // Always "available" (API-based)
+                is_downloading: false,
+                partial_size: 0,
+                is_directory: false,
+                engine_type: EngineType::GroqCloud,
+                accuracy_score: 0.85,
+                speed_score: 0.98, // Fastest cloud model
+                // Cloud models don't use CoreML
+                coreml_url: None,
+                coreml_size_mb: 0,
+                is_coreml_downloaded: false,
+                is_coreml_downloading: false,
             },
         );
 
@@ -313,6 +405,8 @@ impl ModelManager {
                 model.is_downloaded = true;
                 model.is_downloading = false;
                 model.partial_size = 0;
+                model.is_coreml_downloaded = false;
+                model.is_coreml_downloading = false;
                 continue;
             }
 
@@ -339,6 +433,10 @@ impl ModelManager {
                 } else {
                     model.partial_size = 0;
                 }
+
+                // CoreML not supported for directory-based models
+                model.is_coreml_downloaded = false;
+                model.is_coreml_downloading = false;
             } else {
                 // For file-based models (existing logic)
                 let model_path = self.models_dir.join(&model.filename);
@@ -353,10 +451,39 @@ impl ModelManager {
                 } else {
                     model.partial_size = 0;
                 }
+
+                // Check CoreML model status (macOS only, Whisper models only)
+                #[cfg(target_os = "macos")]
+                if model.engine_type == EngineType::Whisper && model.coreml_url.is_some() {
+                    let coreml_path = self.get_coreml_model_path_internal(&model.filename);
+                    model.is_coreml_downloaded = coreml_path.exists() && coreml_path.is_dir();
+                    model.is_coreml_downloading = false;
+                }
+
+                #[cfg(not(target_os = "macos"))]
+                {
+                    model.is_coreml_downloaded = false;
+                    model.is_coreml_downloading = false;
+                }
             }
         }
 
         Ok(())
+    }
+
+    /// Get the path where CoreML model should be stored
+    /// CoreML models must be in the same directory as the .bin file with naming: ggml-{model}-encoder.mlmodelc
+    fn get_coreml_model_path_internal(&self, model_filename: &str) -> PathBuf {
+        // Extract model name from filename (e.g., "ggml-small.bin" -> "small")
+        let model_name = model_filename
+            .strip_prefix("ggml-")
+            .unwrap_or(model_filename)
+            .strip_suffix(".bin")
+            .unwrap_or(model_filename);
+
+        // CoreML model directory name: ggml-{model}-encoder.mlmodelc
+        self.models_dir
+            .join(format!("ggml-{}-encoder.mlmodelc", model_name))
     }
 
     fn auto_select_model_if_needed(&self) -> Result<()> {
@@ -792,6 +919,272 @@ impl ModelManager {
         self.update_download_status()?;
 
         info!("Download cancelled for: {}", model_id);
+        Ok(())
+    }
+
+    /// Get the path to the CoreML model for a given model ID (if downloaded)
+    #[cfg(target_os = "macos")]
+    pub fn get_coreml_model_path(&self, model_id: &str) -> Option<PathBuf> {
+        let model_info = self.get_model_info(model_id)?;
+
+        // Only Whisper models support CoreML
+        if model_info.engine_type != EngineType::Whisper {
+            return None;
+        }
+
+        // Check if CoreML is available for this model
+        if model_info.coreml_url.is_none() {
+            return None;
+        }
+
+        let coreml_path = self.get_coreml_model_path_internal(&model_info.filename);
+        if coreml_path.exists() && coreml_path.is_dir() {
+            Some(coreml_path)
+        } else {
+            None
+        }
+    }
+
+    /// Download the CoreML encoder model for a Whisper model (macOS only)
+    /// This enables Apple Neural Engine acceleration for 2-3x faster transcription
+    #[cfg(target_os = "macos")]
+    pub async fn download_coreml_model(&self, model_id: &str) -> Result<()> {
+        let model_info = {
+            let models = self.available_models.lock().unwrap();
+            models.get(model_id).cloned()
+        };
+
+        let model_info =
+            model_info.ok_or_else(|| anyhow::anyhow!("Model not found: {}", model_id))?;
+
+        // Only Whisper models support CoreML
+        if model_info.engine_type != EngineType::Whisper {
+            return Err(anyhow::anyhow!(
+                "CoreML is only supported for Whisper models"
+            ));
+        }
+
+        let coreml_url = model_info
+            .coreml_url
+            .ok_or_else(|| anyhow::anyhow!("No CoreML model available for {}", model_id))?;
+
+        let coreml_path = self.get_coreml_model_path_internal(&model_info.filename);
+
+        // Don't download if already exists
+        if coreml_path.exists() && coreml_path.is_dir() {
+            info!("CoreML model already downloaded for {}", model_id);
+            return Ok(());
+        }
+
+        info!(
+            "Starting CoreML model download for {} from {}",
+            model_id, coreml_url
+        );
+
+        // Mark as downloading
+        {
+            let mut models = self.available_models.lock().unwrap();
+            if let Some(model) = models.get_mut(model_id) {
+                model.is_coreml_downloading = true;
+            }
+        }
+
+        // Emit download started event
+        let _ = self
+            .app_handle
+            .emit("coreml-download-started", model_id.to_string());
+
+        // Download to a partial file
+        let partial_path = self
+            .models_dir
+            .join(format!("{}.coreml.partial", &model_info.filename));
+
+        let client = reqwest::Client::new();
+        let response = client.get(&coreml_url).send().await?;
+
+        if !response.status().is_success() {
+            {
+                let mut models = self.available_models.lock().unwrap();
+                if let Some(model) = models.get_mut(model_id) {
+                    model.is_coreml_downloading = false;
+                }
+            }
+            return Err(anyhow::anyhow!(
+                "Failed to download CoreML model: HTTP {}",
+                response.status()
+            ));
+        }
+
+        let total_size = response.content_length().unwrap_or(0);
+        let mut downloaded = 0u64;
+        let mut stream = response.bytes_stream();
+        let mut file = std::fs::File::create(&partial_path)?;
+
+        while let Some(chunk) = stream.next().await {
+            let chunk = chunk.map_err(|e| {
+                let mut models = self.available_models.lock().unwrap();
+                if let Some(model) = models.get_mut(model_id) {
+                    model.is_coreml_downloading = false;
+                }
+                e
+            })?;
+
+            file.write_all(&chunk)?;
+            downloaded += chunk.len() as u64;
+
+            // Emit progress event
+            let percentage = if total_size > 0 {
+                (downloaded as f64 / total_size as f64) * 100.0
+            } else {
+                0.0
+            };
+
+            let _ = self.app_handle.emit(
+                "coreml-download-progress",
+                serde_json::json!({
+                    "model_id": model_id,
+                    "downloaded": downloaded,
+                    "total": total_size,
+                    "percentage": percentage,
+                }),
+            );
+        }
+
+        file.flush()?;
+        drop(file);
+
+        // Extract the archive (supports both .tar.gz and .zip)
+        info!("Extracting CoreML model for {}", model_id);
+        let _ = self.app_handle.emit("coreml-extraction-started", model_id);
+
+        let temp_extract_dir = self
+            .models_dir
+            .join(format!("{}.coreml.extracting", &model_info.filename));
+
+        // Clean up any previous incomplete extraction
+        if temp_extract_dir.exists() {
+            let _ = fs::remove_dir_all(&temp_extract_dir);
+        }
+        fs::create_dir_all(&temp_extract_dir)?;
+
+        // Determine archive type and extract
+        if coreml_url.ends_with(".tar.gz") || coreml_url.ends_with(".tgz") {
+            let tar_gz = File::open(&partial_path)?;
+            let tar = GzDecoder::new(tar_gz);
+            let mut archive = Archive::new(tar);
+            archive.unpack(&temp_extract_dir)?;
+        } else if coreml_url.ends_with(".zip") {
+            // Use unzip command for .zip files
+            let status = std::process::Command::new("unzip")
+                .arg("-q")
+                .arg(&partial_path)
+                .arg("-d")
+                .arg(&temp_extract_dir)
+                .status();
+
+            if let Err(e) = status {
+                let _ = fs::remove_dir_all(&temp_extract_dir);
+                let _ = fs::remove_file(&partial_path);
+                {
+                    let mut models = self.available_models.lock().unwrap();
+                    if let Some(model) = models.get_mut(model_id) {
+                        model.is_coreml_downloading = false;
+                    }
+                }
+                return Err(anyhow::anyhow!("Failed to extract zip: {}", e));
+            }
+        } else {
+            // Assume it's already the mlmodelc directory structure
+            let _ = fs::rename(&partial_path, &coreml_path);
+        }
+
+        // Find the .mlmodelc directory in the extracted content
+        let mut mlmodelc_found = false;
+        for entry in fs::read_dir(&temp_extract_dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            if path.is_dir()
+                && path
+                    .file_name()
+                    .map(|n| n.to_string_lossy().ends_with(".mlmodelc"))
+                    .unwrap_or(false)
+            {
+                // Move the .mlmodelc directory to the final location
+                if coreml_path.exists() {
+                    let _ = fs::remove_dir_all(&coreml_path);
+                }
+                fs::rename(&path, &coreml_path)?;
+                mlmodelc_found = true;
+                break;
+            }
+        }
+
+        if !mlmodelc_found {
+            // Check if the extracted directory itself is the mlmodelc
+            let entries: Vec<_> = fs::read_dir(&temp_extract_dir)?
+                .filter_map(|e| e.ok())
+                .collect();
+            if entries.len() == 1 && entries[0].path().is_dir() {
+                let source = entries[0].path();
+                if coreml_path.exists() {
+                    let _ = fs::remove_dir_all(&coreml_path);
+                }
+                fs::rename(&source, &coreml_path)?;
+                mlmodelc_found = true;
+            }
+        }
+
+        // Clean up
+        let _ = fs::remove_dir_all(&temp_extract_dir);
+        let _ = fs::remove_file(&partial_path);
+
+        if !mlmodelc_found {
+            {
+                let mut models = self.available_models.lock().unwrap();
+                if let Some(model) = models.get_mut(model_id) {
+                    model.is_coreml_downloading = false;
+                }
+            }
+            return Err(anyhow::anyhow!(
+                "Could not find .mlmodelc directory in extracted archive"
+            ));
+        }
+
+        // Update status
+        {
+            let mut models = self.available_models.lock().unwrap();
+            if let Some(model) = models.get_mut(model_id) {
+                model.is_coreml_downloading = false;
+                model.is_coreml_downloaded = true;
+            }
+        }
+
+        // Emit completion event
+        let _ = self
+            .app_handle
+            .emit("coreml-download-complete", model_id.to_string());
+
+        info!("Successfully downloaded CoreML model for {}", model_id);
+        Ok(())
+    }
+
+    /// Delete the CoreML model for a given model ID (macOS only)
+    #[cfg(target_os = "macos")]
+    pub fn delete_coreml_model(&self, model_id: &str) -> Result<()> {
+        let model_info = self
+            .get_model_info(model_id)
+            .ok_or_else(|| anyhow::anyhow!("Model not found: {}", model_id))?;
+
+        let coreml_path = self.get_coreml_model_path_internal(&model_info.filename);
+
+        if coreml_path.exists() {
+            fs::remove_dir_all(&coreml_path)?;
+            info!("Deleted CoreML model for {}", model_id);
+        }
+
+        // Update status
+        self.update_download_status()?;
+
         Ok(())
     }
 }

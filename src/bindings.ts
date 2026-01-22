@@ -786,6 +786,68 @@ async getRecommendedFirstModel() : Promise<Result<string, string>> {
     else return { status: "error", error: e  as any };
 }
 },
+/**
+ * Download CoreML model for Apple Neural Engine acceleration (macOS only)
+ */
+async downloadCoremlModel(modelId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("download_coreml_model", { modelId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Delete CoreML model (macOS only)
+ */
+async deleteCoremlModel(modelId: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("delete_coreml_model", { modelId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Check if running on macOS (for UI to show/hide CoreML options)
+ */
+async isCoremlAvailable() : Promise<boolean> {
+    return await TAURI_INVOKE("is_coreml_available");
+},
+/**
+ * Validate a Groq API key before using it
+ * Returns Ok(()) if valid, or an error message if invalid
+ */
+async validateGroqApiKey(apiKey: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("validate_groq_api_key", { apiKey }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Check if a model requires an API key (cloud models)
+ */
+async modelRequiresApiKey(modelId: string) : Promise<Result<boolean, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("model_requires_api_key", { modelId }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Check if Groq API key is configured in settings
+ */
+async isGroqApiKeyConfigured() : Promise<Result<boolean, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("is_groq_api_key_configured") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async updateMicrophoneMode(alwaysOn: boolean) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("update_microphone_mode", { alwaysOn }) };
@@ -1245,7 +1307,7 @@ async isLaptop() : Promise<Result<boolean, string>> {
 
 /** user-defined types **/
 
-export type AppSettings = { bindings: Partial<{ [key in string]: ShortcutBinding }>; push_to_talk: boolean; audio_feedback: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; update_checks_enabled?: boolean; selected_model?: string; always_on_microphone?: boolean; selected_microphone?: string | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: Partial<{ [key in string]: string }>; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; snippets?: Snippet[]; snippets_enabled?: boolean; auto_format_enabled?: boolean; auto_format_lists?: boolean; verbal_commands_enabled?: boolean; tone_adjustment_enabled?: boolean; default_tone?: ToneStyle; app_tone_mappings?: Partial<{ [key in string]: ToneStyle }>; developer_mode?: DeveloperMode; preserve_code_syntax?: boolean; developer_dictionary?: string[]; correction_detection_enabled?: boolean; context_awareness_enabled?: boolean; context_per_app_permissions?: Partial<{ [key in string]: boolean }>; groq_transcription_api_key?: string; multilingual_mode_enabled?: boolean; primary_language?: string | null; secondary_language?: string | null; language_detection_sensitivity?: number; show_meeting_menu?: boolean; meeting_mode_enabled?: boolean; meeting_chunk_duration_seconds?: number; meeting_auto_summarize?: boolean; meeting_extract_action_items?: boolean; meeting_summary_prompt?: string; meeting_action_items_prompt?: string; live_preview_enabled?: boolean; live_preview_interval_ms?: number; watch_folders?: WatchFolderConfig[] | null; whisper_mode_enabled?: boolean; vad_threshold?: number; diarization_enabled?: boolean }
+export type AppSettings = { bindings: Partial<{ [key in string]: ShortcutBinding }>; push_to_talk: boolean; audio_feedback: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; update_checks_enabled?: boolean; selected_model?: string; always_on_microphone?: boolean; selected_microphone?: string | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: Partial<{ [key in string]: string }>; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; snippets?: Snippet[]; snippets_enabled?: boolean; auto_format_enabled?: boolean; auto_format_lists?: boolean; verbal_commands_enabled?: boolean; tone_adjustment_enabled?: boolean; default_tone?: ToneStyle; app_tone_mappings?: Partial<{ [key in string]: ToneStyle }>; developer_mode?: DeveloperMode; preserve_code_syntax?: boolean; developer_dictionary?: string[]; correction_detection_enabled?: boolean; context_awareness_enabled?: boolean; context_per_app_permissions?: Partial<{ [key in string]: boolean }>; groq_transcription_api_key?: string; multilingual_mode_enabled?: boolean; primary_language?: string | null; secondary_language?: string | null; language_detection_sensitivity?: number; show_meeting_menu?: boolean; meeting_mode_enabled?: boolean; meeting_chunk_duration_seconds?: number; meeting_auto_summarize?: boolean; meeting_extract_action_items?: boolean; meeting_summary_prompt?: string; meeting_action_items_prompt?: string; live_preview_enabled?: boolean; live_preview_interval_ms?: number; watch_folders?: WatchFolderConfig[] | null; whisper_mode_enabled?: boolean; vad_threshold?: number; diarization_enabled?: boolean; coreml_enabled?: boolean; auto_download_coreml?: boolean }
 export type AudioDevice = { index: string; name: string; is_default: boolean; device_type: AudioDeviceType }
 /**
  * Device type classification for audio devices
@@ -1319,7 +1381,7 @@ export type MeetingState =
  * Meeting is being processed (transcription/summarization)
  */
 { state: "Processing"; meeting_id: string }
-export type ModelInfo = { id: string; name: string; description: string; filename: string; url: string | null; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; is_directory: boolean; engine_type: EngineType; accuracy_score: number; speed_score: number }
+export type ModelInfo = { id: string; name: string; description: string; filename: string; url: string | null; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; is_directory: boolean; engine_type: EngineType; accuracy_score: number; speed_score: number; coreml_url?: string | null; coreml_size_mb?: number; is_coreml_downloaded?: boolean; is_coreml_downloading?: boolean }
 export type ModelLoadStatus = { is_loaded: boolean; current_model: string | null }
 export type ModelUnloadTimeout = "never" | "immediately" | "min_2" | "min_5" | "min_10" | "min_15" | "hour_1" | "sec_5"
 export type OverlayPosition = "none" | "top" | "bottom"

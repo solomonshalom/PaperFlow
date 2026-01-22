@@ -35,6 +35,15 @@ pub struct ModelStateEvent {
     pub error: Option<String>,
 }
 
+/// Event emitted during CoreML model compilation (first-run takes 3-5 minutes)
+#[derive(Clone, Debug, Serialize)]
+pub struct CoreMLCompilationEvent {
+    pub event_type: String, // "started", "completed", "failed"
+    pub model_id: String,
+    pub estimated_time_seconds: Option<u32>,
+    pub error: Option<String>,
+}
+
 enum LoadedEngine {
     Whisper(WhisperEngine),
     Parakeet(ParakeetEngine),
@@ -244,8 +253,78 @@ impl TranscriptionManager {
                 let path = model_path.as_ref().ok_or_else(|| {
                     anyhow::anyhow!("Model path missing for Whisper engine '{}'", model_id)
                 })?;
+
+                // Check if CoreML is enabled and available (macOS only)
+                #[cfg(target_os = "macos")]
+                let using_coreml = {
+                    let settings = get_settings(&self.app_handle);
+                    if settings.coreml_enabled {
+                        // Check if CoreML model is downloaded
+                        if let Some(coreml_path) = self.model_manager.get_coreml_model_path(model_id)
+                        {
+                            info!(
+                                "CoreML model found at {:?}, will use Apple Neural Engine acceleration",
+                                coreml_path
+                            );
+
+                            // Check if this might be the first compilation using a marker file
+                            // ANECompilerService caches compiled models, so first-run is slow
+                            let compiled_marker = coreml_path.join(".compiled");
+                            let is_first_run = !compiled_marker.exists();
+
+                            if is_first_run {
+                                info!(
+                                    "First-time CoreML compilation detected, this may take 3-5 minutes"
+                                );
+                                let _ = self.app_handle.emit(
+                                    "coreml-compilation-status",
+                                    CoreMLCompilationEvent {
+                                        event_type: "started".to_string(),
+                                        model_id: model_id.to_string(),
+                                        estimated_time_seconds: Some(240), // ~4 minutes
+                                        error: None,
+                                    },
+                                );
+                            }
+
+                            true
+                        } else {
+                            info!("CoreML enabled but model not downloaded, using Metal acceleration");
+                            false
+                        }
+                    } else {
+                        info!("CoreML disabled, using Metal acceleration");
+                        false
+                    }
+                };
+
+                #[cfg(not(target_os = "macos"))]
+                let using_coreml = false;
+
                 let mut engine = WhisperEngine::new();
-                engine.load_model(path).map_err(|e| {
+                let load_result = engine.load_model(path);
+
+                // Emit CoreML compilation completed event if we were using CoreML
+                #[cfg(target_os = "macos")]
+                if using_coreml {
+                    // Create marker file to indicate compilation is done
+                    if let Some(coreml_path) = self.model_manager.get_coreml_model_path(model_id) {
+                        let compiled_marker = coreml_path.join(".compiled");
+                        let _ = std::fs::write(&compiled_marker, "");
+                    }
+
+                    let _ = self.app_handle.emit(
+                        "coreml-compilation-status",
+                        CoreMLCompilationEvent {
+                            event_type: "completed".to_string(),
+                            model_id: model_id.to_string(),
+                            estimated_time_seconds: None,
+                            error: None,
+                        },
+                    );
+                }
+
+                load_result.map_err(|e| {
                     let error_msg = format!("Failed to load whisper model {}: {}", model_id, e);
                     let _ = self.app_handle.emit(
                         "model-state-changed",
@@ -258,6 +337,7 @@ impl TranscriptionManager {
                     );
                     anyhow::anyhow!(error_msg)
                 })?;
+
                 LoadedEngine::Whisper(engine)
             }
             EngineType::Parakeet => {

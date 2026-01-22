@@ -70,7 +70,8 @@ chrono = "0.4"
 rusqlite = { version = "0.37", features = ["bundled"] }
 tar = "0.4.44"
 flate2 = "1.0"
-transcribe-rs = { version = "0.2.2", features = ["whisper", "parakeet", "moonshine"] }
+# Using forked transcribe-rs with CoreML support for Apple Neural Engine acceleration
+transcribe-rs = { git = "https://github.com/solomonshalom/transcribe-rs", features = ["whisper", "parakeet", "moonshine", "coreml"] }
 ferrous-opencc = "0.2.3"
 symphonia = { version = "0.5", features = ["mp3", "aac", "ogg", "flac", "wav", "pcm"] }
 specta = "=2.0.0-rc.22"

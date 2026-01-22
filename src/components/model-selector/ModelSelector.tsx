@@ -21,11 +21,19 @@ interface DownloadProgress {
   percentage: number;
 }
 
+interface CoreMLCompilationEvent {
+  event_type: string; // "started" | "completed" | "failed"
+  model_id: string;
+  estimated_time_seconds?: number;
+  error?: string;
+}
+
 type ModelStatus =
   | "ready"
   | "loading"
   | "downloading"
   | "extracting"
+  | "coreml_compiling"
   | "error"
   | "unloaded"
   | "none";
@@ -57,6 +65,10 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
   const [extractingModels, setExtractingModels] = useState<Set<string>>(
     new Set(),
   );
+  const [coremlCompiling, setCoremlCompiling] = useState<{
+    modelId: string;
+    estimatedSeconds?: number;
+  } | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -223,6 +235,32 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
       setModelStatus("error");
     });
 
+    // Listen for CoreML compilation events (first-run takes 3-5 minutes)
+    const coremlCompilationUnlisten = listen<CoreMLCompilationEvent>(
+      "coreml-compilation-status",
+      (event) => {
+        const { event_type, model_id, estimated_time_seconds, error } = event.payload;
+        switch (event_type) {
+          case "started":
+            setCoremlCompiling({
+              modelId: model_id,
+              estimatedSeconds: estimated_time_seconds,
+            });
+            setModelStatus("coreml_compiling");
+            break;
+          case "completed":
+            setCoremlCompiling(null);
+            // Status will be set by model-state-changed event
+            break;
+          case "failed":
+            setCoremlCompiling(null);
+            setModelError(error || "CoreML compilation failed");
+            setModelStatus("error");
+            break;
+        }
+      }
+    );
+
     // Click outside to close dropdown
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -243,6 +281,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
       extractionStartedUnlisten.then((fn) => fn());
       extractionCompletedUnlisten.then((fn) => fn());
       extractionFailedUnlisten.then((fn) => fn());
+      coremlCompilationUnlisten.then((fn) => fn());
     };
   }, []);
 
@@ -378,6 +417,12 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
               modelName: getTranslatedModelName(currentModel, t),
             })
           : t("modelSelector.extractingGeneric");
+      case "coreml_compiling":
+        // Show first-time CoreML compilation message
+        if (coremlCompiling?.estimatedSeconds) {
+          return t("modelSelector.coreml.compilingFirst");
+        }
+        return t("modelSelector.coreml.compiling");
       case "error":
         return modelError || t("modelSelector.modelError");
       case "unloaded":

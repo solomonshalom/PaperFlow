@@ -384,6 +384,11 @@ pub struct AppSettings {
     // === Speaker Diarization ===
     #[serde(default)]
     pub diarization_enabled: bool,
+    // === CoreML Acceleration (macOS only) ===
+    #[serde(default = "default_coreml_enabled")]
+    pub coreml_enabled: bool,
+    #[serde(default = "default_auto_download_coreml")]
+    pub auto_download_coreml: bool,
 }
 
 fn default_model() -> String {
@@ -481,6 +486,22 @@ fn default_live_preview_interval_ms() -> u32 {
 
 fn default_vad_threshold() -> f32 {
     0.3 // Normal VAD threshold, whisper mode uses 0.15
+}
+
+fn default_coreml_enabled() -> bool {
+    // Enable CoreML by default on macOS for Apple Neural Engine acceleration
+    #[cfg(target_os = "macos")]
+    return true;
+    #[cfg(not(target_os = "macos"))]
+    return false;
+}
+
+fn default_auto_download_coreml() -> bool {
+    // Auto-download CoreML models when downloading Whisper models on macOS
+    #[cfg(target_os = "macos")]
+    return true;
+    #[cfg(not(target_os = "macos"))]
+    return false;
 }
 
 fn default_post_process_provider_id() -> String {
@@ -749,6 +770,8 @@ pub fn get_default_settings() -> AppSettings {
         whisper_mode_enabled: false,
         vad_threshold: default_vad_threshold(),
         diarization_enabled: false,
+        coreml_enabled: default_coreml_enabled(),
+        auto_download_coreml: default_auto_download_coreml(),
     }
 }
 
