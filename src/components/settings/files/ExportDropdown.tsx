@@ -136,6 +136,8 @@ export const ExportDropdown: React.FC<ExportDropdownProps> = ({
     markdown: t("settings.files.export.formats.md"),
     csv: t("settings.files.export.formats.csv"),
     html: t("settings.files.export.formats.html"),
+    docx: t("settings.files.export.formats.docx"),
+    pdf: t("settings.files.export.formats.pdf"),
   };
 
   return (

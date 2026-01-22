@@ -65,6 +65,7 @@ const DEFAULT_AUDIO_DEVICE: AudioDevice = {
   index: "default",
   name: "Default",
   is_default: true,
+  device_type: "microphone",
 };
 
 const settingUpdaters: {
