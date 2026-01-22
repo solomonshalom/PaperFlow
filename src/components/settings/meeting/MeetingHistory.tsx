@@ -22,16 +22,12 @@ const TabButton: React.FC<{
   <button
     onClick={onClick}
     className={`text-xs font-medium transition-colors ${
-      active
-        ? "text-text"
-        : "text-mid-gray hover:text-text/70"
+      active ? "text-text" : "text-mid-gray hover:text-text/70"
     }`}
   >
     {label}
     {count !== undefined && count > 0 && (
-      <span className="ml-1 text-mid-gray">
-        ({count})
-      </span>
+      <span className="ml-1 text-mid-gray">({count})</span>
     )}
   </button>
 );
@@ -123,7 +119,8 @@ const MeetingEntry: React.FC<MeetingEntryProps> = ({
             )}
             {hasActions && (
               <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-medium border border-emerald-500/20">
-                {entry.action_items?.length} {t("settings.meeting.history.actionItems")}
+                {entry.action_items?.length}{" "}
+                {t("settings.meeting.history.actionItems")}
               </span>
             )}
           </div>
@@ -226,13 +223,8 @@ const MeetingEntry: React.FC<MeetingEntryProps> = ({
             {activeTab === "actions" && entry.action_items ? (
               <ul className="space-y-1.5 text-sm">
                 {entry.action_items.map((item, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2"
-                  >
-                    <span className="text-mid-gray shrink-0">
-                      {i + 1}.
-                    </span>
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-mid-gray shrink-0">{i + 1}.</span>
                     <span className="text-text/90">{item}</span>
                   </li>
                 ))}
@@ -251,9 +243,7 @@ const MeetingEntry: React.FC<MeetingEntryProps> = ({
 
 // Empty state
 const EmptyState: React.FC<{ message: string }> = ({ message }) => (
-  <div className="px-4 py-3 text-center text-text/60">
-    {message}
-  </div>
+  <div className="px-4 py-3 text-center text-text/60">{message}</div>
 );
 
 // Loading skeleton

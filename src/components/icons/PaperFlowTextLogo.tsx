@@ -2,15 +2,22 @@
 // This is a brand logo component - the brand name should not be translated
 import React from "react";
 
-const PaperFlowTextLogo = ({
-  width,
-  height,
-  className,
-}: {
+interface PaperFlowTextLogoProps {
   width?: number;
   height?: number;
   className?: string;
+  variant?: "brand" | "text";
+}
+
+const PaperFlowTextLogo: React.FC<PaperFlowTextLogoProps> = ({
+  width,
+  height,
+  className,
+  variant = "brand",
 }) => {
+  // "brand" uses pink logo-primary color, "text" uses currentColor (white/black based on theme)
+  const fillClass = variant === "brand" ? "logo-primary" : "logo-text";
+
   return (
     <svg
       width={width}
@@ -44,7 +51,7 @@ const PaperFlowTextLogo = ({
         fontFamily="CutiePatootie, sans-serif"
         fontWeight="400"
         fontSize="240"
-        className="logo-primary"
+        className={fillClass}
       >
         PaperFlow
       </text>

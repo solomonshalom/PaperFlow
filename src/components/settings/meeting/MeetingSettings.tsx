@@ -105,9 +105,7 @@ export const MeetingSettings: React.FC = () => {
       <SettingsGroup title={t("settings.meeting.title")}>
         <ToggleSwitch
           checked={meetingEnabled}
-          onChange={(enabled) =>
-            updateSetting("meeting_mode_enabled", enabled)
-          }
+          onChange={(enabled) => updateSetting("meeting_mode_enabled", enabled)}
           isUpdating={isUpdating("meeting_mode_enabled")}
           label={t("settings.meeting.enable.label")}
           description={t("settings.meeting.enable.description")}
@@ -185,9 +183,7 @@ export const MeetingSettings: React.FC = () => {
             }
             isUpdating={isUpdating("meeting_extract_action_items")}
             label={t("settings.meeting.extractActionItems.label")}
-            description={t(
-              "settings.meeting.extractActionItems.description",
-            )}
+            description={t("settings.meeting.extractActionItems.description")}
             descriptionMode="tooltip"
             grouped={true}
           />

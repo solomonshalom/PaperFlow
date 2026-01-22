@@ -213,6 +213,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
         .on_menu_event(|app, event| match event.id.as_ref() {
             "settings" => {
                 show_main_window(app);
+                let _ = app.emit("navigate-to-settings", ());
             }
             "check_updates" => {
                 let settings = settings::get_settings(app);
@@ -481,7 +482,6 @@ pub fn run() {
         }))
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_process::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_macos_permissions::init())

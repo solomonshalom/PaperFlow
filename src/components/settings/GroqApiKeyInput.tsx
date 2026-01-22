@@ -24,7 +24,6 @@ export const GroqApiKeyInput: React.FC<GroqApiKeyInputProps> = React.memo(
       <SettingContainer
         title={t("settings.cloudTranscription.groqApiKey.label")}
         description={t("settings.cloudTranscription.groqApiKey.description")}
-        descriptionMode="inline"
         grouped={grouped}
       >
         <div className="flex items-center gap-2">

@@ -239,7 +239,8 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
     const coremlCompilationUnlisten = listen<CoreMLCompilationEvent>(
       "coreml-compilation-status",
       (event) => {
-        const { event_type, model_id, estimated_time_seconds, error } = event.payload;
+        const { event_type, model_id, estimated_time_seconds, error } =
+          event.payload;
         switch (event_type) {
           case "started":
             setCoremlCompiling({
@@ -258,7 +259,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onError }) => {
             setModelStatus("error");
             break;
         }
-      }
+      },
     );
 
     // Click outside to close dropdown

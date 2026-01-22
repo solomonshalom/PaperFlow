@@ -71,6 +71,10 @@
   fill: var(--color-logo-primary);
 }
 
+.logo-text {
+  fill: var(--color-text);
+}
+
 .logo-stroke {
   fill: var(--color-logo-stroke);
   stroke: var(--color-logo-stroke);

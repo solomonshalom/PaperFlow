@@ -12,7 +12,6 @@ import {
   Users,
   FileAudio,
 } from "lucide-react";
-import PaperFlowTextLogo from "./icons/PaperFlowTextLogo";
 import PaperFlowHand from "./icons/PaperFlowHand";
 import { useSettings } from "../hooks/useSettings";
 import {
@@ -132,9 +131,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     .map(([id, config]) => ({ id: id as SidebarSection, ...config }));
 
   return (
-    <div className="flex flex-col w-40 h-full border-r border-mid-gray/20 items-center px-2">
-      <PaperFlowTextLogo width={120} className="m-4" />
-      <div className="flex flex-col w-full items-center gap-1 pt-2 border-t border-mid-gray/20">
+    <div className="flex flex-col w-40 h-full border-r border-mid-gray/20 items-center px-2 pt-2">
+      <div className="flex flex-col w-full items-center gap-1">
         {availableSections.map((section) => {
           const Icon = section.icon;
           const isActive = activeSection === section.id;

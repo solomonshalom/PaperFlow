@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "\u2318K\u3067\u8a73\u7d30\u8a2d\u5b9a\u3092\u958b\u304f",
+    "settingsHintWindows": "Ctrl+K\u3067\u8a73\u7d30\u8a2d\u5b9a\u3092\u958b\u304f"
+  },
+  "commandPalette": {
+    "label": "\u30b3\u30de\u30f3\u30c9\u30d1\u30ec\u30c3\u30c8",
+    "placeholder": "\u8a2d\u5b9a\u3092\u691c\u7d22...",
+    "noResults": "\u7d50\u679c\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093",
+    "home": "\u30db\u30fc\u30e0",
+    "hint": {
+      "navigate": "\u2191\u2193 \u79fb\u52d5",
+      "select": "\u21B5 \u9078\u629e"
+    }
+  },
   "tray": {
     "settings": "設定...",
     "checkUpdates": "アップデートを確認...",
@@ -484,14 +498,8 @@
     "downloadingModel": "{{model}}をダウンロード中...",
     "checkingUpdates": "アップデートを確認中...",
     "updateAvailable": "アップデートあり: {{version}}",
-    "updateAvailableShort": "アップデートあり",
     "upToDate": "最新です",
-    "downloadUpdate": "アップデートをダウンロード",
-    "restart": "再起動",
     "updateCheckingDisabled": "アップデート確認無効",
-    "downloading": "ダウンロード中... {{progress}}%",
-    "installing": "インストール中...",
-    "preparing": "準備中...",
     "checkForUpdates": "アップデートを確認"
   },
   "common": {

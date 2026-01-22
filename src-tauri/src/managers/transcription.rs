@@ -260,7 +260,8 @@ impl TranscriptionManager {
                     let settings = get_settings(&self.app_handle);
                     if settings.coreml_enabled {
                         // Check if CoreML model is downloaded
-                        if let Some(coreml_path) = self.model_manager.get_coreml_model_path(model_id)
+                        if let Some(coreml_path) =
+                            self.model_manager.get_coreml_model_path(model_id)
                         {
                             info!(
                                 "CoreML model found at {:?}, will use Apple Neural Engine acceleration",
@@ -289,7 +290,9 @@ impl TranscriptionManager {
 
                             true
                         } else {
-                            info!("CoreML enabled but model not downloaded, using Metal acceleration");
+                            info!(
+                                "CoreML enabled but model not downloaded, using Metal acceleration"
+                            );
                             false
                         }
                     } else {

@@ -27,57 +27,57 @@ Based on comprehensive codebase analysis, PaperFlow has:
 
 ### Tier 1: Direct Competitors (Local Desktop Dictation)
 
-| App                                                           | Pricing            | Processing | Platforms       | Strengths                                                                    |
-| ------------------------------------------------------------- | ------------------ | ---------- | --------------- | ---------------------------------------------------------------------------- |
-| **[MacWhisper](https://goodsnooze.gumroad.com/l/macwhisper)** | $30-79 one-time    | Local      | macOS, iOS      | Best file transcription, speaker diarization, watch folders, PDF/DOCX export |
-| **[Superwhisper](https://superwhisper.com/)**                 | $8.49/mo or $249   | Local      | macOS, iOS      | Custom modes, mouse activation, minimal UI                                   |
-| **[Wispr Flow](https://wisprflow.ai)**                        | $15/mo or $144/yr  | Cloud      | Mac, Win, iOS   | Context-aware formatting, SOC 2/HIPAA, whisper mode                          |
-| **[Vibe](https://thewh1teagle.github.io/vibe/)**              | Free               | Local      | Mac, Win, Linux | Open source, 90+ languages, GPU acceleration, batch processing               |
-| **[Buzz](https://buzzcaptions.com/)**                         | Free               | Local      | Mac, Win, Linux | Open source, Vulkan GPU support, presentation mode, watch folders            |
-| **[VoiceInk](https://github.com/Beingpax/VoiceInk)**          | $25 one-time       | Local      | macOS           | Open source, Power Mode, simple                                              |
-| **[Aiko](https://sindresorhus.com/aiko)**                     | Free               | Local      | macOS, iOS      | Pure simplicity, no network entitlement                                      |
-| **[Whisper Notes](https://whispernotes.app/)**                | $4.99 one-time     | Local      | macOS, iOS      | System-wide dictation, lightweight, privacy-first                            |
-| **[SpeechPulse](https://speechpulse.com/)**                   | $59-159 one-time   | Local      | Mac, Windows    | Dragon-like experience, NVIDIA GPU support, subtitle creation                |
-| **[Whispering](https://github.com/braden-w/whispering)**      | Free               | Local      | Mac, Win, Linux | Open source, browser version available, push-to-talk                         |
-| **PaperFlow**                                                 | **Free**           | Local      | Mac, Win, Linux | Most features, open source                                                   |
+| App                                                           | Pricing           | Processing | Platforms       | Strengths                                                                    |
+| ------------------------------------------------------------- | ----------------- | ---------- | --------------- | ---------------------------------------------------------------------------- |
+| **[MacWhisper](https://goodsnooze.gumroad.com/l/macwhisper)** | $30-79 one-time   | Local      | macOS, iOS      | Best file transcription, speaker diarization, watch folders, PDF/DOCX export |
+| **[Superwhisper](https://superwhisper.com/)**                 | $8.49/mo or $249  | Local      | macOS, iOS      | Custom modes, mouse activation, minimal UI                                   |
+| **[Wispr Flow](https://wisprflow.ai)**                        | $15/mo or $144/yr | Cloud      | Mac, Win, iOS   | Context-aware formatting, SOC 2/HIPAA, whisper mode                          |
+| **[Vibe](https://thewh1teagle.github.io/vibe/)**              | Free              | Local      | Mac, Win, Linux | Open source, 90+ languages, GPU acceleration, batch processing               |
+| **[Buzz](https://buzzcaptions.com/)**                         | Free              | Local      | Mac, Win, Linux | Open source, Vulkan GPU support, presentation mode, watch folders            |
+| **[VoiceInk](https://github.com/Beingpax/VoiceInk)**          | $25 one-time      | Local      | macOS           | Open source, Power Mode, simple                                              |
+| **[Aiko](https://sindresorhus.com/aiko)**                     | Free              | Local      | macOS, iOS      | Pure simplicity, no network entitlement                                      |
+| **[Whisper Notes](https://whispernotes.app/)**                | $4.99 one-time    | Local      | macOS, iOS      | System-wide dictation, lightweight, privacy-first                            |
+| **[SpeechPulse](https://speechpulse.com/)**                   | $59-159 one-time  | Local      | Mac, Windows    | Dragon-like experience, NVIDIA GPU support, subtitle creation                |
+| **[Whispering](https://github.com/braden-w/whispering)**      | Free              | Local      | Mac, Win, Linux | Open source, browser version available, push-to-talk                         |
+| **PaperFlow**                                                 | **Free**          | Local      | Mac, Win, Linux | Most features, open source                                                   |
 
 ### Tier 2: Meeting-Focused Apps
 
-| App                                          | Pricing                   | Key Strength                          | Processing  |
-| -------------------------------------------- | ------------------------- | ------------------------------------- | ----------- |
-| **[Otter.ai](https://otter.ai)**             | Free-$30/mo               | Best speaker ID, OtterPilot auto-join | Cloud       |
-| **[Fireflies.ai](https://fireflies.ai)**     | Free-$19/mo               | 100+ languages, real-time bullets     | Cloud       |
-| **[Fathom](https://fathom.video)**           | Free-$39/mo               | Unlimited free recordings, highlights | Cloud       |
-| **[Grain](https://grain.com)**               | Free-$29/mo               | Video clips, highlight reels          | Cloud       |
-| **[Read.ai](https://read.ai)**               | Free-$29/mo               | Real-time metrics, coaching reports   | Cloud       |
-| **[Sembly AI](https://sembly.ai)**           | Free-$29/mo               | 48 languages, sentiment analysis      | Cloud       |
-| **[Avoma](https://avoma.com)**               | $19-59/mo                 | CRM integration, conversation intel   | Cloud       |
-| **[Tactiq](https://tactiq.io)**              | Free-$12/mo               | Chrome extension, no bot needed       | Local+Cloud |
-| **[Notta](https://notta.ai)**                | Free-$28/mo               | 58 languages, bilingual transcription | Cloud       |
-| **[Airgram](https://airgram.io)**            | Free-$18/mo               | Meeting analytics, talk ratio         | Cloud       |
-| **[Jamie](https://www.meetjamie.ai/)**       | Free                      | Bot-free, 100% local, offline         | Local       |
-| **[Krisp](https://krisp.ai)**                | Free-$30/mo               | Noise cancellation + transcription    | Local       |
+| App                                      | Pricing     | Key Strength                          | Processing  |
+| ---------------------------------------- | ----------- | ------------------------------------- | ----------- |
+| **[Otter.ai](https://otter.ai)**         | Free-$30/mo | Best speaker ID, OtterPilot auto-join | Cloud       |
+| **[Fireflies.ai](https://fireflies.ai)** | Free-$19/mo | 100+ languages, real-time bullets     | Cloud       |
+| **[Fathom](https://fathom.video)**       | Free-$39/mo | Unlimited free recordings, highlights | Cloud       |
+| **[Grain](https://grain.com)**           | Free-$29/mo | Video clips, highlight reels          | Cloud       |
+| **[Read.ai](https://read.ai)**           | Free-$29/mo | Real-time metrics, coaching reports   | Cloud       |
+| **[Sembly AI](https://sembly.ai)**       | Free-$29/mo | 48 languages, sentiment analysis      | Cloud       |
+| **[Avoma](https://avoma.com)**           | $19-59/mo   | CRM integration, conversation intel   | Cloud       |
+| **[Tactiq](https://tactiq.io)**          | Free-$12/mo | Chrome extension, no bot needed       | Local+Cloud |
+| **[Notta](https://notta.ai)**            | Free-$28/mo | 58 languages, bilingual transcription | Cloud       |
+| **[Airgram](https://airgram.io)**        | Free-$18/mo | Meeting analytics, talk ratio         | Cloud       |
+| **[Jamie](https://www.meetjamie.ai/)**   | Free        | Bot-free, 100% local, offline         | Local       |
+| **[Krisp](https://krisp.ai)**            | Free-$30/mo | Noise cancellation + transcription    | Local       |
 
 ### Tier 3: Professional Transcription Services
 
-| App                                            | Pricing              | Key Strength                              | Processing    |
-| ---------------------------------------------- | -------------------- | ----------------------------------------- | ------------- |
-| **[Descript](https://descript.com)**           | Free-$30/mo          | Text-based video editing, Overdub         | Cloud         |
-| **[Rev](https://rev.com)**                     | $0.25-1.99/min       | Human + AI options, HIPAA compliant       | Cloud         |
-| **[Sonix](https://sonix.ai)**                  | $10/hr pay-as-you-go | 53+ languages, automated translation      | Cloud         |
-| **[Happy Scribe](https://happyscribe.com)**    | $17-49/mo            | AI + human editing, 120+ languages        | Cloud         |
-| **[Trint](https://trint.com)**                 | $52-100/mo           | Desktop app, 50+ languages, newsrooms     | Cloud         |
-| **[Transkriptor](https://transkriptor.com)**   | $4.99+/mo            | 50+ languages, real-time capabilities     | Cloud         |
-| **[Amberscript](https://amberscript.com)**     | $10-32/mo            | 90+ languages, ISO compliant              | Cloud         |
+| App                                          | Pricing              | Key Strength                          | Processing |
+| -------------------------------------------- | -------------------- | ------------------------------------- | ---------- |
+| **[Descript](https://descript.com)**         | Free-$30/mo          | Text-based video editing, Overdub     | Cloud      |
+| **[Rev](https://rev.com)**                   | $0.25-1.99/min       | Human + AI options, HIPAA compliant   | Cloud      |
+| **[Sonix](https://sonix.ai)**                | $10/hr pay-as-you-go | 53+ languages, automated translation  | Cloud      |
+| **[Happy Scribe](https://happyscribe.com)**  | $17-49/mo            | AI + human editing, 120+ languages    | Cloud      |
+| **[Trint](https://trint.com)**               | $52-100/mo           | Desktop app, 50+ languages, newsrooms | Cloud      |
+| **[Transkriptor](https://transkriptor.com)** | $4.99+/mo            | 50+ languages, real-time capabilities | Cloud      |
+| **[Amberscript](https://amberscript.com)**   | $10-32/mo            | 90+ languages, ISO compliant          | Cloud      |
 
 ### Tier 4: Developer-Focused
 
-| App                                                              | Pricing       | Key Strength                                 |
-| ---------------------------------------------------------------- | ------------- | -------------------------------------------- |
-| **[Talon Voice](https://talonvoice.com/)**                       | Free/Patreon  | Command-based coding, Cursorless integration |
-| **[Whisper.cpp](https://github.com/ggerganov/whisper.cpp)**      | Free          | High-performance C/C++ port, Apple Silicon   |
-| **[WhisperLive](https://github.com/collabora/WhisperLive)**      | Free          | Real-time streaming transcription            |
-| **[OpenWhispr](https://github.com/HeroTools/open-whispr)**       | Free          | Cross-platform, privacy-first, MIT license   |
+| App                                                         | Pricing      | Key Strength                                 |
+| ----------------------------------------------------------- | ------------ | -------------------------------------------- |
+| **[Talon Voice](https://talonvoice.com/)**                  | Free/Patreon | Command-based coding, Cursorless integration |
+| **[Whisper.cpp](https://github.com/ggerganov/whisper.cpp)** | Free         | High-performance C/C++ port, Apple Silicon   |
+| **[WhisperLive](https://github.com/collabora/WhisperLive)** | Free         | Real-time streaming transcription            |
+| **[OpenWhispr](https://github.com/HeroTools/open-whispr)**  | Free         | Cross-platform, privacy-first, MIT license   |
 
 ---
 
@@ -92,11 +92,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://goodsnooze.gumroad.com/l/macwhisper)** | **Platform:** macOS, iOS
 
 **Pricing:**
+
 - Free version available
 - Pro: $30 (Gumroad) or $79.99 (App Store one-time)
 - Subscription options: $4.99/week, $8.99/month, $29.99/year
 
 **Key Features:**
+
 - Speaker diarization with manual speaker labeling
 - Watch folders for auto-transcription
 - Export: DOCX, PDF, HTML, SRT, VTT, CSV, Markdown
@@ -107,6 +109,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Cross-platform sync (Mac, iPhone, iPad)
 
 **Unique Differentiators:**
+
 - Most polished native macOS UI
 - Auto-record meetings from Zoom, Teams, Webex, Skype, Discord
 - 25% discount for journalists, students, nonprofits
@@ -120,11 +123,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://superwhisper.com/)** | **Platform:** macOS, iOS
 
 **Pricing:**
+
 - Free: 15 min/day, smaller models
 - Pro: $8.49/month, $84.99/year, or $249 lifetime
 - 30-day refund policy
 
 **Key Features:**
+
 - Multiple AI models: Nano, Fast, Pro, Ultra
 - Custom modes with personalized AI instructions
 - Pure voice transcription or tailored text formatting
@@ -134,6 +139,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Works entirely offline
 
 **Unique Differentiators:**
+
 - Bootstrapped indie project (no VC funding)
 - License covers both Mac and iOS
 - Modes can be customized per workflow
@@ -147,12 +153,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://wisprflow.ai)** | **Platform:** Mac, Windows, iOS
 
 **Pricing:**
+
 - Basic: Free (2,000 words/week)
 - Pro: $15/month or $144/year
 - Students: $10/month
 - Teams/Enterprise: Custom pricing
 
 **Key Features:**
+
 - 4x faster than typing with AI edits
 - Automatic filler word removal ("ums", "uhs")
 - Handles self-corrections intelligently
@@ -162,6 +170,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - SOC 2 Type II, HIPAA compliant
 
 **Unique Differentiators:**
+
 - $81M funding, building "Voice OS"
 - Context-aware formatting per app
 - Silent "whisper mode" for public spaces
@@ -177,6 +186,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** 100% Free, Open Source
 
 **Key Features:**
+
 - 90+ languages with diarization
 - Export: SRT, VTT, TXT, HTML, PDF, JSON, DOCX
 - Real-time preview during transcription
@@ -186,6 +196,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Claude API integration for summarization
 
 **Unique Differentiators:**
+
 - Fully offline with zero data leaving device
 - Real-time recording + transcription
 - Best free cross-platform option
@@ -201,6 +212,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** 100% Free, Open Source
 
 **Key Features:**
+
 - Vulkan GPU acceleration (even integrated GPUs)
 - Export: TXT, SRT, VTT
 - Advanced viewer with search, playback controls
@@ -211,6 +223,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Supports Whisper, Whisper.cpp, Faster Whisper
 
 **Unique Differentiators:**
+
 - Real-time transcription possible on laptops with Vulkan
 - Professional controls: loop segments, follow audio
 - Available as Flatpak/Snap for Linux
@@ -226,6 +239,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** $25 one-time (open source, GPL v3.0)
 
 **Key Features:**
+
 - 99% accuracy with local AI models
 - 100+ languages
 - Power Mode: auto-applies settings per app/URL
@@ -233,6 +247,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - LLM post-processing via Ollama or cloud APIs
 
 **Unique Differentiators:**
+
 - Open source with paid license option
 - 16GB RAM recommended for optimal performance
 - Apple Silicon only for local models
@@ -248,6 +263,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** Free
 
 **Key Features:**
+
 - Zero network entitlement (physically cannot connect to internet)
 - Whisper large v3 model on macOS
 - 100+ language support
@@ -256,6 +272,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Translation to English during transcription
 
 **Unique Differentiators:**
+
 - Developed by Sindre Sorhus
 - Prioritizes accuracy over speed
 - No live transcription (file-based only)
@@ -271,6 +288,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** $4.99 one-time (includes iOS + Mac)
 
 **Key Features:**
+
 - 100% offline with Whisper Large-V3-Turbo
 - System-wide dictation (hold Fn to speak)
 - 100+ languages with auto-detection
@@ -279,6 +297,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Lock screen recording on iOS
 
 **Unique Differentiators:**
+
 - 12x realtime on M4, 8x on M1
 - Floating recording widget
 - No subscriptions, updates free for life
@@ -294,6 +313,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** $59-159 one-time
 
 **Key Features:**
+
 - Dragon-like dictation experience
 - 100 languages including English translation
 - NVIDIA GPU acceleration
@@ -302,6 +322,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - SRT/VTT subtitle creation
 
 **Unique Differentiators:**
+
 - Works in any text input field
 - Push-to-talk with customizable hotkeys
 - AI grammar/spelling correction integration
@@ -319,12 +340,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://otter.ai)** | **Platform:** Web, Desktop, Mobile
 
 **Pricing:**
+
 - Free: 300 min/month, 30 min/conversation
 - Pro: $10-17/month (1,200 min/month)
 - Business: $20-30/month (6,000 min/month)
 - Enterprise: Custom
 
 **Key Features:**
+
 - OtterPilot auto-joins Zoom, Meet, Teams
 - Real-time transcription in 3 languages
 - AI Chat to query transcripts
@@ -333,6 +356,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Mobile recording for in-person meetings
 
 **Unique Differentiators:**
+
 - Industry-leading speaker identification
 - Ask questions to your transcripts
 - Auto-generated summaries and action items
@@ -346,12 +370,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://fireflies.ai)** | **Platform:** Web, Desktop
 
 **Pricing:**
+
 - Free: 800 min/month
 - Pro: $10-18/month (unlimited transcription)
 - Business: $19-29/month (video recording)
 - Enterprise: Custom
 
 **Key Features:**
+
 - 100+ languages
 - Real-time bullet-point notes during calls
 - File upload transcription (MP3, MP4, WAV, M4A)
@@ -359,6 +385,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Talk-time analytics
 
 **Unique Differentiators:**
+
 - Real-time note generation during meetings
 - Video recording for Business+ plans
 - Conversation intelligence features
@@ -372,12 +399,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://fathom.video)** | **Platform:** Web, Desktop, Mobile
 
 **Pricing:**
+
 - Free: Unlimited recordings and storage
 - Premium: $19/month
 - Team: $29/month
 - Team Pro: $39/month
 
 **Key Features:**
+
 - Unlimited free meeting recordings
 - 28 languages
 - Video highlights and clips
@@ -386,6 +415,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - SOC 2 Type II certified
 
 **Unique Differentiators:**
+
 - Best free tier (unlimited recordings forever)
 - Highlight reel creation
 - Global search across all meetings
@@ -399,11 +429,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://grain.com)** | **Platform:** Web, Desktop, Mobile
 
 **Pricing:**
+
 - Free: 5 recordings
 - Pro: $19/month
 - Enterprise: Custom
 
 **Key Features:**
+
 - Video clip creation from meetings
 - AI summaries with custom templates
 - Search across all recorded calls
@@ -411,6 +443,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Integrations: Slack, HubSpot, Notion, Salesforce
 
 **Unique Differentiators:**
+
 - Best for creating shareable video clips
 - Strong for sales enablement and training
 - Glean and ChatGPT MCP integrations
@@ -424,12 +457,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://read.ai)** | **Platform:** Web, Desktop, Mobile
 
 **Pricing:**
+
 - Free: 5 meetings/month
 - Pro: $15/month
 - Enterprise: $22.50/month
 - Enterprise+: $29.75/month
 
 **Key Features:**
+
 - Real-time meeting metrics
 - Personalized coaching reports
 - Talking speed, filler words, bias detection
@@ -438,6 +473,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - File upload transcription
 
 **Unique Differentiators:**
+
 - Real-time dashboard during meetings
 - Engagement scores and sentiment analysis
 - Education pricing ($5/month)
@@ -451,11 +487,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://tactiq.io)** | **Platform:** Chrome Extension
 
 **Pricing:**
+
 - Free: 10 transcripts/month, 5 AI credits
 - Pro: $12/month (unlimited transcripts)
 - Team/Business: Custom
 
 **Key Features:**
+
 - No-bot meeting transcripts
 - 60+ languages
 - Export to PDF, TXT, Google Drive, Notion
@@ -464,6 +502,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - SOC 2 Type II compliant
 
 **Unique Differentiators:**
+
 - No visible bot in meetings
 - Chrome extension (lightweight)
 - AI uses OpenAI enterprise API (no training on data)
@@ -477,12 +516,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://krisp.ai)** | **Platform:** Windows, macOS, Mobile
 
 **Pricing:**
+
 - Free: Unlimited transcription, 60 min/day noise cancellation
 - Pro: $8-16/month
 - Business: $30/month
 - Enterprise: Custom
 
 **Key Features:**
+
 - Two-way noise cancellation
 - 96% transcription accuracy in 16+ languages
 - On-device processing
@@ -491,6 +532,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - SOC 2, GDPR, HIPAA compliant
 
 **Unique Differentiators:**
+
 - Industry-leading noise cancellation
 - Audio processed locally (not sent to cloud)
 - Works with any conferencing app
@@ -508,12 +550,14 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://descript.com)** | **Platform:** Desktop (Mac, Windows)
 
 **Pricing:**
+
 - Free: 60 media minutes/month
 - Creator: $24/month (30 hours/month)
 - Pro: $24-30/month
 - Enterprise: Custom
 
 **Key Features:**
+
 - Text-based video editing
 - 22 languages
 - Speaker identification
@@ -522,6 +566,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - AI Green Screen, Eye Contact
 
 **Unique Differentiators:**
+
 - Edit video by editing text
 - Filler word removal
 - Studio-quality features (4K export)
@@ -535,11 +580,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://rev.com)** | **Platform:** Web, Mobile
 
 **Pricing:**
+
 - AI Transcription: $0.25/minute
 - Human Transcription: $1.99/minute
 - Rev Max subscription: $29.99/month
 
 **Key Features:**
+
 - Human transcription option (99%+ accuracy)
 - AI Notetaker for meetings
 - HIPAA compliant
@@ -547,6 +594,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Custom AI templates
 
 **Unique Differentiators:**
+
 - Professional human transcribers available
 - No extra charge for accents or multiple speakers
 - Enterprise security
@@ -560,11 +608,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://sonix.ai)** | **Platform:** Web
 
 **Pricing:**
+
 - Standard: $10/hour (pay-as-you-go)
 - Premium: $22/month + $5/hour
 - Enterprise: Custom
 
 **Key Features:**
+
 - 53+ languages
 - Automated translation
 - AI analysis (summarization, themes, sentiment)
@@ -573,6 +623,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Subtitle export (SRT, VTT)
 
 **Unique Differentiators:**
+
 - 30 min in ~3-4 minutes processing
 - Student/nonprofit discounts
 - SOC 2 Type 2 compliant
@@ -586,6 +637,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://happyscribe.com)** | **Platform:** Web
 
 **Pricing:**
+
 - Free: 10 minutes
 - Basic: $17/month (120 minutes)
 - Pro: $29/month (300 minutes)
@@ -593,6 +645,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Human transcription: $1.75/minute
 
 **Key Features:**
+
 - 120+ languages
 - AI (85% accuracy) or human (99% accuracy)
 - AI Notetaker for meetings
@@ -600,6 +653,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Real-time collaboration
 
 **Unique Differentiators:**
+
 - European company (GDPR native)
 - SOC 2 Type II certified
 - Integrations: Dropbox, Google Drive, Zapier
@@ -613,11 +667,13 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://trint.com)** | **Platform:** Web, Desktop, Mobile
 
 **Pricing:**
+
 - Starter: $52/month (billed annually)
 - Advanced: $100/month
 - Enterprise: Custom
 
 **Key Features:**
+
 - 50+ languages
 - Desktop app with live transcription
 - Real-time collaboration
@@ -626,6 +682,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - System audio capture (Enterprise)
 
 **Unique Differentiators:**
+
 - Founded by Emmy Award-winning journalist
 - Popular in newsrooms and media
 - Live transcription on desktop
@@ -643,9 +700,11 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://cleftnotes.com)** | **Platform:** iOS, macOS, visionOS
 
 **Pricing:**
+
 - $5/month or $30/year (Mac only with own API key)
 
 **Key Features:**
+
 - Voice-to-text with AI organization
 - Automatically creates headings and structure
 - Markdown editor
@@ -653,6 +712,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - Obsidian sync
 
 **Unique Differentiators:**
+
 - Reorganizes and structures your dictation
 - Password-protected sharing
 - Spotlight search integration
@@ -666,10 +726,12 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://vomo.ai)** | **Platform:** iOS, Web
 
 **Pricing:**
+
 - Free: 30 minutes
 - Pro: $9/month (unlimited)
 
 **Key Features:**
+
 - 98% accuracy with 50+ languages
 - GPT-4o powered analysis
 - Speaker identification
@@ -678,6 +740,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - YouTube video transcription
 
 **Unique Differentiators:**
+
 - Professional templates (legal, medical, sales)
 - Chat with transcripts
 - End-to-end encryption
@@ -693,6 +756,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **Pricing:** $4/month (unlimited)
 
 **Key Features:**
+
 - 2-hour recordings
 - AI notes (summary, takeaways, quiz)
 - Chat with notes
@@ -700,6 +764,7 @@ Based on comprehensive codebase analysis, PaperFlow has:
 - iCloud sync
 
 **Unique Differentiators:**
+
 - Study materials generation
 - Quiz creation from lectures
 - Native Apple apps
@@ -713,10 +778,12 @@ Based on comprehensive codebase analysis, PaperFlow has:
 **[Official Site](https://transcribe.wreally.com)** | **Platform:** Web
 
 **Pricing:**
+
 - Self-transcription: $20/year
 - Automatic: $20/year + $6/hour
 
 **Key Features:**
+
 - Voice-typing (dictation)
 - Foot pedal integration
 - Keyboard shortcuts
@@ -731,15 +798,15 @@ Based on comprehensive codebase analysis, PaperFlow has:
 
 ### Where You're Winning
 
-| Feature                    | PaperFlow       | MacWhisper | Wispr Flow | Superwhisper | Vibe    |
-| -------------------------- | --------------- | ---------- | ---------- | ------------ | ------- |
-| **Price**                  | ✅ Free         | ❌ $30-79  | ❌ $144/yr | ❌ $85/yr    | ✅ Free |
-| **Open Source**            | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ✅ Yes  |
-| **Linux Support**          | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ✅ Yes  |
-| **Multiple Model Engines** | ✅ 7 options    | ⚠️ 2       | ❌ 1       | ⚠️ 4         | ⚠️ 1    |
-| **Voice Snippets**         | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ❌ No   |
-| **Meeting Mode**           | ✅ Built-in     | ⚠️ Basic   | ❌ No      | ❌ No        | ⚠️ Basic|
-| **Verbal Corrections**     | ✅ "Actually X" | ❌ No      | ⚠️ Partial | ❌ No        | ❌ No   |
+| Feature                    | PaperFlow       | MacWhisper | Wispr Flow | Superwhisper | Vibe     |
+| -------------------------- | --------------- | ---------- | ---------- | ------------ | -------- |
+| **Price**                  | ✅ Free         | ❌ $30-79  | ❌ $144/yr | ❌ $85/yr    | ✅ Free  |
+| **Open Source**            | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ✅ Yes   |
+| **Linux Support**          | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ✅ Yes   |
+| **Multiple Model Engines** | ✅ 7 options    | ⚠️ 2       | ❌ 1       | ⚠️ 4         | ⚠️ 1     |
+| **Voice Snippets**         | ✅ Yes          | ❌ No      | ❌ No      | ❌ No        | ❌ No    |
+| **Meeting Mode**           | ✅ Built-in     | ⚠️ Basic   | ❌ No      | ❌ No        | ⚠️ Basic |
+| **Verbal Corrections**     | ✅ "Actually X" | ❌ No      | ⚠️ Partial | ❌ No        | ❌ No    |
 
 ### Where You're Losing
 
@@ -761,28 +828,28 @@ Based on comprehensive codebase analysis, PaperFlow has:
 
 ### Local Dictation Apps
 
-| App            | Price           | Platforms       | Local | Open Source | Speaker ID | Live | Rating |
-| -------------- | --------------- | --------------- | ----- | ----------- | ---------- | ---- | ------ |
-| PaperFlow      | Free            | Mac/Win/Linux   | ✅    | ✅          | ❌         | ✅   | ⭐⭐⭐⭐ |
-| MacWhisper     | $30-79          | Mac/iOS         | ✅    | ❌          | ✅         | ⚠️   | ⭐⭐⭐⭐⭐ |
-| Superwhisper   | $85/yr          | Mac/iOS         | ✅    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐ |
-| Wispr Flow     | $144/yr         | Mac/Win/iOS     | ❌    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐ |
-| Vibe           | Free            | Mac/Win/Linux   | ✅    | ✅          | ✅         | ✅   | ⭐⭐⭐⭐ |
-| Buzz           | Free            | Mac/Win/Linux   | ✅    | ✅          | ❌         | ⚠️   | ⭐⭐⭐⭐ |
-| VoiceInk       | $25             | Mac             | ✅    | ✅          | ❌         | ✅   | ⭐⭐⭐⭐ |
-| Whisper Notes  | $4.99           | Mac/iOS         | ✅    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐ |
-| Aiko           | Free            | Mac/iOS         | ✅    | ❌          | ❌         | ❌   | ⭐⭐⭐⭐ |
+| App           | Price   | Platforms     | Local | Open Source | Speaker ID | Live | Rating     |
+| ------------- | ------- | ------------- | ----- | ----------- | ---------- | ---- | ---------- |
+| PaperFlow     | Free    | Mac/Win/Linux | ✅    | ✅          | ❌         | ✅   | ⭐⭐⭐⭐   |
+| MacWhisper    | $30-79  | Mac/iOS       | ✅    | ❌          | ✅         | ⚠️   | ⭐⭐⭐⭐⭐ |
+| Superwhisper  | $85/yr  | Mac/iOS       | ✅    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐   |
+| Wispr Flow    | $144/yr | Mac/Win/iOS   | ❌    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐   |
+| Vibe          | Free    | Mac/Win/Linux | ✅    | ✅          | ✅         | ✅   | ⭐⭐⭐⭐   |
+| Buzz          | Free    | Mac/Win/Linux | ✅    | ✅          | ❌         | ⚠️   | ⭐⭐⭐⭐   |
+| VoiceInk      | $25     | Mac           | ✅    | ✅          | ❌         | ✅   | ⭐⭐⭐⭐   |
+| Whisper Notes | $4.99   | Mac/iOS       | ✅    | ❌          | ❌         | ✅   | ⭐⭐⭐⭐   |
+| Aiko          | Free    | Mac/iOS       | ✅    | ❌          | ❌         | ❌   | ⭐⭐⭐⭐   |
 
 ### Meeting Apps
 
-| App           | Free Tier        | Key Strength              | Bot-Free |
-| ------------- | ---------------- | ------------------------- | -------- |
-| Fathom        | Unlimited        | Best free tier            | ❌       |
-| Otter         | 300 min/mo       | Speaker ID                | ❌       |
-| Tactiq        | 10 meetings/mo   | Chrome extension          | ✅       |
-| Krisp         | Unlimited trans  | Noise cancellation        | ✅       |
-| Read.ai       | 5 meetings/mo    | Analytics                 | ✅       |
-| Fireflies     | 800 min/mo       | Real-time notes           | ❌       |
+| App       | Free Tier       | Key Strength       | Bot-Free |
+| --------- | --------------- | ------------------ | -------- |
+| Fathom    | Unlimited       | Best free tier     | ❌       |
+| Otter     | 300 min/mo      | Speaker ID         | ❌       |
+| Tactiq    | 10 meetings/mo  | Chrome extension   | ✅       |
+| Krisp     | Unlimited trans | Noise cancellation | ✅       |
+| Read.ai   | 5 meetings/mo   | Analytics          | ✅       |
+| Fireflies | 800 min/mo      | Real-time notes    | ❌       |
 
 ---
 
@@ -791,29 +858,34 @@ Based on comprehensive codebase analysis, PaperFlow has:
 ### 🔴 High Priority (Must Have)
 
 #### 1. Speaker Diarization
+
 - Every serious competitor has this
 - Critical for meetings, interviews, podcasts
 - Look at: pyannote, WhisperX, NeMo
 - **Impact:** Would make meeting mode actually competitive
 
 #### 2. System Audio Capture
+
 - MacWhisper's killer feature for meetings
 - Capture Zoom/Teams without needing meeting bots
 - Essential for your meeting mode to compete
 - **Impact:** Unlocks passive meeting recording
 
 #### 3. More Export Formats
+
 - Add: DOCX, PDF, Markdown, CSV, HTML
 - Consider: EDL for video editors
 - **Impact:** Professional users expect these
 
 #### 4. Latency Optimization
+
 - Benchmark against Wispr Flow
 - Your live preview needs to feel instant
 - Consider streaming transcription display
 - **Impact:** Makes real-time dictation feel responsive
 
 #### 5. UI/UX Polish
+
 - Your settings have 35+ files - simplify
 - MacWhisper/Aiko feel native; aim for that
 - Onboarding should take <60 seconds
@@ -824,26 +896,31 @@ Based on comprehensive codebase analysis, PaperFlow has:
 ### 🟡 Medium Priority (Competitive Edge)
 
 #### 6. Custom Dictionary (beyond snippets)
+
 - 500+ custom words for technical terms
 - Superwhisper, MacWhisper offer this
 - **Impact:** Better accuracy for specialized vocabulary
 
 #### 7. Whisper Mode
+
 - Silent dictation for public spaces
 - Wispr Flow's unique feature
 - **Impact:** Expands use cases significantly
 
 #### 8. Mobile App (iOS at minimum)
+
 - MacWhisper, Superwhisper, Wispr Flow all have mobile
 - Consider React Native since you have React frontend
 - **Impact:** Complete ecosystem play
 
 #### 9. URL Transcription
+
 - Paste YouTube/podcast URL -> transcribe
 - MacWhisper, VOMO do this
 - **Impact:** Content creators love this
 
 #### 10. Noise Cancellation
+
 - Krisp's killer feature
 - Would differentiate from pure transcription tools
 - **Impact:** Better accuracy in noisy environments
@@ -853,22 +930,27 @@ Based on comprehensive codebase analysis, PaperFlow has:
 ### 🟢 Lower Priority (Nice to Have)
 
 #### 11. Translation
+
 - Whisper supports translate-to-English natively
 - **Impact:** International users
 
 #### 12. Timestamp-click Navigation
+
 - Click timestamp to hear that audio
 - **Impact:** Better editing workflow
 
 #### 13. Cloud Sync for History
+
 - Optional, privacy-respecting
 - **Impact:** Multi-device users
 
 #### 14. Browser Extension
+
 - Web-based dictation
 - **Impact:** Expands reach
 
 #### 15. AI Chat with Transcripts
+
 - Query your transcription history
 - Read.ai, VOMO have this
 - **Impact:** Power user feature
@@ -910,6 +992,7 @@ Your unique value proposition should be:
 Being free and open source with comparable features would make you objectively the best value proposition.
 
 Consider optional:
+
 - GitHub Sponsors for supporters
 - "Pro" cloud features (sync, backup) as optional paid tier
 - Never gate core functionality
@@ -929,18 +1012,21 @@ Consider optional:
 ## Implementation Roadmap
 
 ### Phase 1: Parity (1-2 months)
+
 - [ ] Speaker diarization
 - [ ] System audio capture
 - [ ] DOCX, PDF, Markdown export
 - [ ] Custom dictionary (500 words)
 
 ### Phase 2: Polish (2-3 months)
+
 - [ ] UI/UX overhaul
 - [ ] Latency optimization
 - [ ] Onboarding simplification
 - [ ] Better error handling
 
 ### Phase 3: Expansion (3-6 months)
+
 - [ ] iOS app
 - [ ] Whisper mode
 - [ ] URL transcription
@@ -951,21 +1037,25 @@ Consider optional:
 ## Conclusion
 
 ### Where you stand today
+
 Feature-rich but rough around the edges. You have more capabilities than most competitors but lack polish and a few critical features (speaker diarization, system audio capture, export formats).
 
 ### What would make you objectively the best
+
 1. **Add speaker diarization and system audio capture** -> match MacWhisper
 2. **Polish the UI to feel native** -> match MacWhisper/Aiko
 3. **Stay free and open source** -> unique advantage no one can match
 4. **Add more export formats** -> match professional tools
 
 ### Your Unique Advantages
+
 - **Only free, open-source option** with this feature set
 - **Cross-platform** (Mac, Windows, Linux) - most competitors are Mac-only
 - **Multiple model engines** - flexibility no one else offers
 - **Voice snippets and verbal corrections** - unique features
 
 ### Bottom line
+
 You're **70% of the way there**. The remaining 30% is about **polish, critical features, and user experience** rather than adding more capabilities. Focus on making what you have work flawlessly.
 
 ---
@@ -973,6 +1063,7 @@ You're **70% of the way there**. The remaining 30% is about **polish, critical f
 ## Sources
 
 ### Local Desktop Apps
+
 - [MacWhisper Official](https://goodsnooze.gumroad.com/l/macwhisper)
 - [MacWhisper Review - AIHungry](https://aihungry.com/tools/macwhisper)
 - [Superwhisper Official](https://superwhisper.com/)
@@ -992,6 +1083,7 @@ You're **70% of the way there**. The remaining 30% is about **polish, critical f
 - [Whispering - Slator](https://slator.com/whispering-open-source-local-first-transcription-app/)
 
 ### Meeting Apps
+
 - [Otter.ai Pricing](https://otter.ai/pricing)
 - [Otter.ai Review - eesel](https://www.eesel.ai/blog/otter-ai)
 - [Fireflies.ai Pricing](https://fireflies.ai/pricing)
@@ -1010,6 +1102,7 @@ You're **70% of the way there**. The remaining 30% is about **polish, critical f
 - [Krisp Pricing](https://krisp.ai/pricing/)
 
 ### Professional Services
+
 - [Descript Pricing](https://www.descript.com/pricing)
 - [Descript Review - Castmagic](https://www.castmagic.io/software-review/descript)
 - [Rev Pricing](https://www.rev.com/pricing)
@@ -1020,12 +1113,14 @@ You're **70% of the way there**. The remaining 30% is about **polish, critical f
 - [Amberscript Pricing](https://www.amberscript.com/en/pricing/)
 
 ### Emerging Apps
+
 - [Cleft Notes Official](https://www.cleftnotes.com/)
 - [VOMO AI Official](https://vomo.ai)
 - [VoicePen App Store](https://apps.apple.com/us/app/ai-note-taker-voicepen/id6462815872)
 - [Transcribe by Wreally](https://transcribe.wreally.com/pricing)
 
 ### General Resources
+
 - [Best Speech-to-Text Software - Jamie](https://www.meetjamie.ai/blog/10-best-speech-to-text-software)
 - [Best Transcription Apps - Sonix](https://sonix.ai/resources/best-transcription-apps-for-speech-to-text/)
 - [MacWhisper Alternatives - AlternativeTo](https://alternativeto.net/software/macwhisper/)

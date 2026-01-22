@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Presiona \u2318K para m\u00e1s ajustes",
+    "settingsHintWindows": "Presiona Ctrl+K para m\u00e1s ajustes"
+  },
+  "commandPalette": {
+    "label": "Paleta de comandos",
+    "placeholder": "Buscar ajustes...",
+    "noResults": "No se encontraron resultados",
+    "home": "Inicio",
+    "hint": {
+      "navigate": "\u2191\u2193 para navegar",
+      "select": "\u21B5 para seleccionar"
+    }
+  },
   "tray": {
     "settings": "Configuración...",
     "checkUpdates": "Buscar actualizaciones...",
@@ -484,14 +498,8 @@
     "downloadingModel": "Descargando {{model}}...",
     "checkingUpdates": "Buscando actualizaciones...",
     "updateAvailable": "Actualización disponible: {{version}}",
-    "updateAvailableShort": "Actualización disponible",
     "upToDate": "Actualizado",
-    "downloadUpdate": "Descargar Actualización",
-    "restart": "Reiniciar",
     "updateCheckingDisabled": "Búsqueda de Actualizaciones Deshabilitada",
-    "downloading": "Descargando... {{progress}}%",
-    "installing": "Instalando...",
-    "preparing": "Preparando...",
     "checkForUpdates": "Buscar actualizaciones"
   },
   "common": {

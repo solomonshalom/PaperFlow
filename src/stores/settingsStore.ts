@@ -180,8 +180,7 @@ const settingUpdaters: {
     commands.changeLivePreviewIntervalSetting(value as number),
   whisper_mode_enabled: (value) =>
     commands.changeWhisperModeEnabledSetting(value as boolean),
-  vad_threshold: (value) =>
-    commands.changeVadThresholdSetting(value as number),
+  vad_threshold: (value) => commands.changeVadThresholdSetting(value as number),
   diarization_enabled: (value) =>
     commands.changeDiarizationEnabledSetting(value as boolean),
 };

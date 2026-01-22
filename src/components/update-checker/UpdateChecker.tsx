@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { check } from "@tauri-apps/plugin-updater";
-import { relaunch } from "@tauri-apps/plugin-process";
 import { listen } from "@tauri-apps/api/event";
-import { ProgressBar } from "../shared";
+import { getVersion } from "@tauri-apps/api/app";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { useSettings } from "../../hooks/useSettings";
+
+const GITHUB_REPO = "solomonshalom/paperflow";
+const RELEASES_URL = `https://github.com/${GITHUB_REPO}/releases`;
+
+interface GitHubRelease {
+  tag_name: string;
+  html_url: string;
+}
 
 interface UpdateCheckerProps {
   className?: string;
@@ -12,11 +19,9 @@ interface UpdateCheckerProps {
 
 const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
   const { t } = useTranslation();
-  // Update checking state
   const [isChecking, setIsChecking] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [isInstalling, setIsInstalling] = useState(false);
-  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [latestVersion, setLatestVersion] = useState<string | null>(null);
   const [showUpToDate, setShowUpToDate] = useState(false);
 
   const { settings, isLoading } = useSettings();
@@ -25,11 +30,8 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
 
   const upToDateTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const isManualCheckRef = useRef(false);
-  const downloadedBytesRef = useRef(0);
-  const contentLengthRef = useRef(0);
 
   useEffect(() => {
-    // Wait for settings to load before doing anything
     if (!settingsLoaded) return;
 
     if (!updateChecksEnabled) {
@@ -44,7 +46,6 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
 
     checkForUpdates();
 
-    // Listen for update check events
     const updateUnlisten = listen("check-for-updates", () => {
       handleManualUpdateCheck();
     });
@@ -57,19 +58,53 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     };
   }, [settingsLoaded, updateChecksEnabled]);
 
-  // Update checking functions
+  const parseVersion = (version: string): number[] => {
+    // Remove 'v' prefix if present
+    const clean = version.replace(/^v/, "");
+    return clean.split(".").map((n) => parseInt(n, 10) || 0);
+  };
+
+  const isNewerVersion = (latest: string, current: string): boolean => {
+    const latestParts = parseVersion(latest);
+    const currentParts = parseVersion(current);
+
+    for (
+      let i = 0;
+      i < Math.max(latestParts.length, currentParts.length);
+      i++
+    ) {
+      const l = latestParts[i] || 0;
+      const c = currentParts[i] || 0;
+      if (l > c) return true;
+      if (l < c) return false;
+    }
+    return false;
+  };
+
   const checkForUpdates = async () => {
     if (!updateChecksEnabled || isChecking) return;
 
     try {
       setIsChecking(true);
-      const update = await check();
 
-      if (update) {
+      const response = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+
+      const release: GitHubRelease = await response.json();
+      const currentVersion = await getVersion();
+
+      if (isNewerVersion(release.tag_name, currentVersion)) {
         setUpdateAvailable(true);
+        setLatestVersion(release.tag_name.replace(/^v/, ""));
         setShowUpToDate(false);
       } else {
         setUpdateAvailable(false);
+        setLatestVersion(null);
 
         if (isManualCheckRef.current) {
           setShowUpToDate(true);
@@ -95,79 +130,30 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     checkForUpdates();
   };
 
-  const installUpdate = async () => {
-    if (!updateChecksEnabled) return;
-    try {
-      setIsInstalling(true);
-      setDownloadProgress(0);
-      downloadedBytesRef.current = 0;
-      contentLengthRef.current = 0;
-      const update = await check();
-
-      if (!update) {
-        console.log("No update available during install attempt");
-        return;
-      }
-
-      await update.downloadAndInstall((event) => {
-        switch (event.event) {
-          case "Started":
-            downloadedBytesRef.current = 0;
-            contentLengthRef.current = event.data.contentLength ?? 0;
-            break;
-          case "Progress":
-            downloadedBytesRef.current += event.data.chunkLength;
-            const progress =
-              contentLengthRef.current > 0
-                ? Math.round(
-                    (downloadedBytesRef.current / contentLengthRef.current) *
-                      100,
-                  )
-                : 0;
-            setDownloadProgress(Math.min(progress, 100));
-            break;
-        }
-      });
-      await relaunch();
-    } catch (error) {
-      console.error("Failed to install update:", error);
-    } finally {
-      setIsInstalling(false);
-      setDownloadProgress(0);
-      downloadedBytesRef.current = 0;
-      contentLengthRef.current = 0;
-    }
+  const openReleasesPage = async () => {
+    await openUrl(RELEASES_URL);
   };
 
-  // Update status functions
   const getUpdateStatusText = () => {
     if (!updateChecksEnabled) {
       return t("footer.updateCheckingDisabled");
     }
-    if (isInstalling) {
-      return downloadProgress > 0 && downloadProgress < 100
-        ? t("footer.downloading", {
-            progress: downloadProgress.toString().padStart(3),
-          })
-        : downloadProgress === 100
-          ? t("footer.installing")
-          : t("footer.preparing");
-    }
     if (isChecking) return t("footer.checkingUpdates");
     if (showUpToDate) return t("footer.upToDate");
-    if (updateAvailable) return t("footer.updateAvailableShort");
+    if (updateAvailable && latestVersion) {
+      return t("footer.updateAvailable", { version: latestVersion });
+    }
     return t("footer.checkForUpdates");
   };
 
   const getUpdateStatusAction = () => {
     if (!updateChecksEnabled) return undefined;
-    if (updateAvailable && !isInstalling) return installUpdate;
-    if (!isChecking && !isInstalling && !updateAvailable)
-      return handleManualUpdateCheck;
+    if (updateAvailable) return openReleasesPage;
+    if (!isChecking && !updateAvailable) return handleManualUpdateCheck;
     return undefined;
   };
 
-  const isUpdateDisabled = !updateChecksEnabled || isChecking || isInstalling;
+  const isUpdateDisabled = !updateChecksEnabled || isChecking;
   const isUpdateClickable =
     !isUpdateDisabled && (updateAvailable || (!isChecking && !showUpToDate));
 
@@ -189,18 +175,6 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
         <span className="text-text/60 tabular-nums">
           {getUpdateStatusText()}
         </span>
-      )}
-
-      {isInstalling && downloadProgress > 0 && downloadProgress < 100 && (
-        <ProgressBar
-          progress={[
-            {
-              id: "update",
-              percentage: downloadProgress,
-            },
-          ]}
-          size="large"
-        />
       )}
     </div>
   );

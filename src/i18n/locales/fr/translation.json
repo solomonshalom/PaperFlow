@@ -1,5 +1,19 @@
 {
   "_comment": "French translation for PaperFlow. Contribute at: https://github.com/cjpais/PaperFlow",
+  "home": {
+    "settingsHint": "Appuyez sur \u2318K pour plus de param\u00e8tres",
+    "settingsHintWindows": "Appuyez sur Ctrl+K pour plus de param\u00e8tres"
+  },
+  "commandPalette": {
+    "label": "Palette de commandes",
+    "placeholder": "Rechercher des param\u00e8tres...",
+    "noResults": "Aucun r\u00e9sultat trouv\u00e9",
+    "home": "Accueil",
+    "hint": {
+      "navigate": "\u2191\u2193 pour naviguer",
+      "select": "\u21B5 pour s\u00e9lectionner"
+    }
+  },
   "tray": {
     "settings": "Paramètres...",
     "checkUpdates": "Rechercher des mises à jour...",
@@ -485,14 +499,8 @@
     "downloadingModel": "Téléchargement de {{model}}...",
     "checkingUpdates": "Recherche de mises à jour...",
     "updateAvailable": "Mise à jour disponible : {{version}}",
-    "updateAvailableShort": "Mise à jour disponible",
     "upToDate": "À jour",
-    "downloadUpdate": "Télécharger la mise à jour",
-    "restart": "Redémarrer",
     "updateCheckingDisabled": "Vérification des mises à jour désactivée",
-    "downloading": "Téléchargement... {{progress}}%",
-    "installing": "Installation...",
-    "preparing": "Préparation...",
     "checkForUpdates": "Rechercher des mises à jour"
   },
   "common": {

@@ -1,5 +1,19 @@
 {
   "_comment": "Vietnamese translation for PaperFlow. Contribute at: https://github.com/cjpais/PaperFlow",
+  "home": {
+    "settingsHint": "Nh\u1ea5n \u2318K \u0111\u1ec3 xem th\u00eam c\u00e0i \u0111\u1eb7t",
+    "settingsHintWindows": "Nh\u1ea5n Ctrl+K \u0111\u1ec3 xem th\u00eam c\u00e0i \u0111\u1eb7t"
+  },
+  "commandPalette": {
+    "label": "B\u1ea3ng l\u1ec7nh",
+    "placeholder": "T\u00ecm ki\u1ebfm c\u00e0i \u0111\u1eb7t...",
+    "noResults": "Kh\u00f4ng t\u00ecm th\u1ea5y k\u1ebft qu\u1ea3",
+    "home": "Trang ch\u1ee7",
+    "hint": {
+      "navigate": "\u2191\u2193 \u0111\u1ec3 di chuy\u1ec3n",
+      "select": "\u21B5 \u0111\u1ec3 ch\u1ecdn"
+    }
+  },
   "tray": {
     "settings": "Cài đặt...",
     "checkUpdates": "Kiểm tra cập nhật...",
@@ -485,14 +499,8 @@
     "downloadingModel": "Đang tải {{model}}...",
     "checkingUpdates": "Đang kiểm tra cập nhật...",
     "updateAvailable": "Có bản cập nhật: {{version}}",
-    "updateAvailableShort": "Có bản cập nhật",
     "upToDate": "Đã cập nhật",
-    "downloadUpdate": "Tải cập nhật",
-    "restart": "Khởi động lại",
     "updateCheckingDisabled": "Đã tắt kiểm tra cập nhật",
-    "downloading": "Đang tải... {{progress}}%",
-    "installing": "Đang cài đặt...",
-    "preparing": "Đang chuẩn bị...",
     "checkForUpdates": "Kiểm tra cập nhật"
   },
   "common": {

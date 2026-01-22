@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Press \u2318K for more settings",
+    "settingsHintWindows": "Press Ctrl+K for more settings"
+  },
+  "commandPalette": {
+    "label": "Command Palette",
+    "placeholder": "Search settings...",
+    "noResults": "No results found",
+    "home": "Home",
+    "hint": {
+      "navigate": "\u2191\u2193 to navigate",
+      "select": "\u21B5 to select"
+    }
+  },
   "tray": {
     "settings": "Settings...",
     "checkUpdates": "Check for Updates...",
@@ -315,6 +329,10 @@
       "showMeetingMenu": {
         "label": "Show Meeting Menu",
         "description": "Show the Meeting option in the sidebar menu"
+      },
+      "showSidebar": {
+        "label": "Show Sidebar",
+        "description": "Show the navigation sidebar when in settings (use \u2318K to navigate without sidebar)"
       },
       "livePreview": {
         "title": "Live Preview",
@@ -841,14 +859,8 @@
     "downloadingModel": "Downloading {{model}}...",
     "checkingUpdates": "Checking for updates...",
     "updateAvailable": "Update available: {{version}}",
-    "updateAvailableShort": "Update available",
     "upToDate": "Up to date",
-    "downloadUpdate": "Download Update",
-    "restart": "Restart",
     "updateCheckingDisabled": "Update Checking Disabled",
-    "downloading": "Downloading... {{progress}}%",
-    "installing": "Installing...",
-    "preparing": "Preparing...",
     "checkForUpdates": "Check for updates"
   },
   "common": {

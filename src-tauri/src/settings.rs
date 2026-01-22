@@ -269,6 +269,8 @@ pub struct AppSettings {
     pub selected_language: String,
     #[serde(default = "default_overlay_position")]
     pub overlay_position: OverlayPosition,
+    #[serde(default)]
+    pub show_sidebar: bool,
     #[serde(default = "default_debug_mode")]
     pub debug_mode: bool,
     #[serde(default = "default_log_level")]
@@ -719,6 +721,7 @@ pub fn get_default_settings() -> AppSettings {
         translate_to_english: false,
         selected_language: "auto".to_string(),
         overlay_position: default_overlay_position(),
+        show_sidebar: false,
         debug_mode: false,
         log_level: default_log_level(),
         custom_words: Vec::new(),

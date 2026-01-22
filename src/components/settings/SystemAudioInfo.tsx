@@ -36,7 +36,7 @@ export const SystemAudioInfo: React.FC<SystemAudioInfoProps> = React.memo(
           setError(
             err instanceof Error
               ? err.message
-              : "Failed to load system audio info"
+              : "Failed to load system audio info",
           );
         } finally {
           setIsLoading(false);
@@ -94,8 +94,8 @@ export const SystemAudioInfo: React.FC<SystemAudioInfoProps> = React.memo(
         {/* Native capture status - subtle inline display */}
         {info.native_available && (
           <div className="px-4 py-3">
-            <div className="flex items-start gap-3">
-              <span className="inline-block w-1.5 h-1.5 bg-logo-primary rounded-full mt-1.5 shrink-0" />
+            <div className="flex items-center gap-3">
+              <span className="inline-block w-1.5 h-1.5 bg-logo-primary rounded-full shrink-0" />
               <div className="min-w-0">
                 <span className="text-sm font-medium text-text">
                   {t("settings.sound.systemAudio.nativeAvailable")}
@@ -203,5 +203,5 @@ export const SystemAudioInfo: React.FC<SystemAudioInfoProps> = React.memo(
         {content}
       </SettingsGroup>
     );
-  }
+  },
 );

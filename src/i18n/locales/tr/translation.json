@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Daha fazla ayar i\u00e7in \u2318K'ye bas\u0131n",
+    "settingsHintWindows": "Daha fazla ayar i\u00e7in Ctrl+K'ye bas\u0131n"
+  },
+  "commandPalette": {
+    "label": "Komut paleti",
+    "placeholder": "Ayarlar\u0131 ara...",
+    "noResults": "Sonu\u00e7 bulunamad\u0131",
+    "home": "Ana sayfa",
+    "hint": {
+      "navigate": "\u2191\u2193 gezinmek i\u00e7in",
+      "select": "\u21B5 se\u00e7mek i\u00e7in"
+    }
+  },
   "tray": {
     "settings": "Ayarlar...",
     "checkUpdates": "Güncellemeleri Kontrol Et...",
@@ -488,14 +502,8 @@
     "downloadingModel": "{{model}} indiriliyor...",
     "checkingUpdates": "Güncellemeler kontrol ediliyor...",
     "updateAvailable": "Güncelleme mevcut: {{version}}",
-    "updateAvailableShort": "Güncelleme mevcut",
     "upToDate": "Güncel",
-    "downloadUpdate": "Güncellemeyi İndir",
-    "restart": "Yeniden Başlat",
     "updateCheckingDisabled": "Güncelleme Kontrolü Devre Dışı",
-    "downloading": "İndiriliyor... %{{progress}}",
-    "installing": "Yükleniyor...",
-    "preparing": "Hazırlanıyor...",
     "checkForUpdates": "Güncellemeleri kontrol et"
   },
   "common": {

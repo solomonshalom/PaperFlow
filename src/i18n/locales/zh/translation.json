@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "\u6309 \u2318K \u6253\u5f00\u66f4\u591a\u8bbe\u7f6e",
+    "settingsHintWindows": "\u6309 Ctrl+K \u6253\u5f00\u66f4\u591a\u8bbe\u7f6e"
+  },
+  "commandPalette": {
+    "label": "\u547d\u4ee4\u9762\u677f",
+    "placeholder": "\u641c\u7d22\u8bbe\u7f6e...",
+    "noResults": "\u672a\u627e\u5230\u7ed3\u679c",
+    "home": "\u4e3b\u9875",
+    "hint": {
+      "navigate": "\u2191\u2193 \u5bfc\u822a",
+      "select": "\u21B5 \u9009\u62e9"
+    }
+  },
   "tray": {
     "settings": "设置...",
     "checkUpdates": "检查更新...",
@@ -484,14 +498,8 @@
     "downloadingModel": "正在下载 {{model}}...",
     "checkingUpdates": "检查更新中...",
     "updateAvailable": "有可用更新: {{version}}",
-    "updateAvailableShort": "有可用更新",
     "upToDate": "已是最新版本",
-    "downloadUpdate": "下载更新",
-    "restart": "重启",
     "updateCheckingDisabled": "更新检查已禁用",
-    "downloading": "下载中... {{progress}}%",
-    "installing": "安装中...",
-    "preparing": "准备中...",
     "checkForUpdates": "检查更新"
   },
   "common": {

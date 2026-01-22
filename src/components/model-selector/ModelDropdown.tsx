@@ -50,7 +50,9 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
   const [coremlDownloadProgress, setCoremlDownloadProgress] = useState<
     Map<string, CoreMLDownloadProgress>
   >(new Map());
-  const [showApiKeyWarning, setShowApiKeyWarning] = useState<string | null>(null);
+  const [showApiKeyWarning, setShowApiKeyWarning] = useState<string | null>(
+    null,
+  );
 
   const availableModels = models.filter((m) => m.is_downloaded);
   const downloadableModels = models.filter((m) => !m.is_downloaded);
@@ -83,17 +85,20 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
           newMap.set(progress.model_id, progress);
           return newMap;
         });
-      }
+      },
     );
 
-    const completeUnlisten = listen<string>("coreml-download-complete", (event) => {
-      const modelId = event.payload;
-      setCoremlDownloadProgress((prev) => {
-        const newMap = new Map(prev);
-        newMap.delete(modelId);
-        return newMap;
-      });
-    });
+    const completeUnlisten = listen<string>(
+      "coreml-download-complete",
+      (event) => {
+        const modelId = event.payload;
+        setCoremlDownloadProgress((prev) => {
+          const newMap = new Map(prev);
+          newMap.delete(modelId);
+          return newMap;
+        });
+      },
+    );
 
     return () => {
       progressUnlisten.then((fn) => fn());
@@ -136,7 +141,10 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
     onModelDownload(modelId);
   };
 
-  const handleCoreMLDownloadClick = async (e: React.MouseEvent, modelId: string) => {
+  const handleCoreMLDownloadClick = async (
+    e: React.MouseEvent,
+    modelId: string,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -156,7 +164,9 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
 
   // Check if a model supports CoreML (Whisper models only)
   const supportsCoreML = (model: ModelInfo) => {
-    return isCoreMLAvailable && model.engine_type === "Whisper" && model.coreml_url;
+    return (
+      isCoreMLAvailable && model.engine_type === "Whisper" && model.coreml_url
+    );
   };
 
   return (
@@ -165,15 +175,26 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
       {showApiKeyWarning && (
         <div className="px-3 py-3 bg-amber-500/10 border-b border-amber-500/20">
           <div className="flex items-start gap-2">
-            <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg
+              className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
             <div className="flex-1">
               <div className="text-xs font-medium text-amber-500 mb-1">
                 {t("modelSelector.apiKeyRequired", "API Key Required")}
               </div>
               <div className="text-xs text-text/70 mb-2">
-                {t("modelSelector.apiKeyRequiredDesc", "This cloud model requires a Groq API key. Go to Settings → Advanced to add your key.")}
+                {t(
+                  "modelSelector.apiKeyRequiredDesc",
+                  "This cloud model requires a Groq API key. Go to Settings → Advanced to add your key.",
+                )}
               </div>
               <div className="flex gap-2">
                 <button
@@ -232,93 +253,28 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm flex items-center flex-wrap gap-1.5">
-                      <span className="truncate max-w-[120px]">{getTranslatedModelName(model, t)}</span>
-                      {/* Badge container - all badges in a row */}
-                      {/* Cloud model badge - soft violet with subtle glow */}
-                      {isCloudModel(model) && (
-                        <span
-                          className="inline-flex items-center gap-1 pl-1 pr-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.12) 100%)',
-                            color: '#a78bfa',
-                            border: '1px solid rgba(139, 92, 246, 0.25)',
-                            boxShadow: '0 0 8px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-                          }}
-                        >
-                          <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                          </svg>
-                          {t("modelSelector.cloud", "Cloud")}
-                        </span>
-                      )}
-                      {/* ANE/CoreML accelerated badge - electric cyan with shimmer */}
-                      {hasCoreMLSupport && isCoreMLDownloaded && (
-                        <span
-                          className="inline-flex items-center gap-1 pl-1 pr-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.18) 0%, rgba(59, 130, 246, 0.12) 100%)',
-                            color: '#22d3ee',
-                            border: '1px solid rgba(34, 211, 238, 0.3)',
-                            boxShadow: '0 0 10px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-                          }}
-                        >
-                          <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9H3.5a.5.5 0 0 1-.48-.641l2.5-8z"/>
-                          </svg>
-                          {t("modelSelector.coreml.accelerated")}
-                        </span>
-                      )}
-                      {/* Active badge - inline with other badges */}
-                      {currentModelId === model.id && (
-                        <>
-                          {isCloudModel(model) && !isGroqKeyConfigured() ? (
-                            <span
-                              className="inline-flex items-center gap-1 pl-1 pr-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
-                              style={{
-                                background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.18) 0%, rgba(245, 158, 11, 0.12) 100%)',
-                                color: '#fbbf24',
-                                border: '1px solid rgba(251, 191, 36, 0.35)',
-                                boxShadow: '0 0 8px rgba(251, 191, 36, 0.12)',
-                              }}
-                              title={t("modelSelector.apiKeyMissing", "API key not configured")}
-                            >
-                              <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                              </svg>
-                              {t("modelSelector.active")}
-                            </span>
-                          ) : (
-                            <span
-                              className="inline-flex items-center gap-1 pl-1 pr-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
-                              style={{
-                                background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.18) 0%, rgba(34, 197, 94, 0.12) 100%)',
-                                color: '#4ade80',
-                                border: '1px solid rgba(74, 222, 128, 0.35)',
-                                boxShadow: '0 0 8px rgba(74, 222, 128, 0.12)',
-                              }}
-                            >
-                              <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022z"/>
-                              </svg>
-                              {t("modelSelector.active")}
-                            </span>
-                          )}
-                        </>
-                      )}
+                    <div className="text-sm">
+                      <span className="truncate">
+                        {getTranslatedModelName(model, t)}
+                      </span>
                     </div>
                     <div className="text-xs text-text/40 italic pr-4 mt-0.5">
                       {getTranslatedModelDescription(model, t)}
                     </div>
                     {/* CoreML download option for Whisper models */}
-                    {hasCoreMLSupport && !isCoreMLDownloaded && !isCoreMLDownloading && (
-                      <button
-                        onClick={(e) => handleCoreMLDownloadClick(e, model.id)}
-                        className="mt-1 text-[10px] text-blue-400 hover:text-blue-300 hover:underline"
-                      >
-                        {t("modelSelector.coreml.download")} ({formatModelSize(Number(model.coreml_size_mb || 0))})
-                      </button>
-                    )}
+                    {hasCoreMLSupport &&
+                      !isCoreMLDownloaded &&
+                      !isCoreMLDownloading && (
+                        <button
+                          onClick={(e) =>
+                            handleCoreMLDownloadClick(e, model.id)
+                          }
+                          className="mt-1 text-[10px] text-blue-400 hover:text-blue-300 hover:underline"
+                        >
+                          {t("modelSelector.coreml.download")} (
+                          {formatModelSize(Number(model.coreml_size_mb || 0))})
+                        </button>
+                      )}
                     {/* CoreML downloading progress */}
                     {isCoreMLDownloading && coremlProgress && (
                       <div className="mt-1 text-[10px] text-blue-400">
@@ -373,7 +329,6 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
           {downloadableModels.map((model) => {
             const isDownloading = downloadProgress.has(model.id);
             const progress = downloadProgress.get(model.id);
-            const hasCoreMLSupport = supportsCoreML(model);
 
             return (
               <div
@@ -388,7 +343,7 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
                 tabIndex={0}
                 role="button"
                 aria-disabled={isDownloading}
-                className={`w-full px-3 py-2 text-left hover:bg-mid-gray/10 transition-colors cursor-pointer focus:outline-none ${
+                className={`group w-full px-3 py-2 text-left hover:bg-mid-gray/10 transition-colors cursor-pointer focus:outline-none ${
                   isDownloading
                     ? "opacity-50 cursor-not-allowed hover:bg-transparent"
                     : ""
@@ -396,41 +351,10 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm flex items-center gap-2">
-                      <span className="truncate">{getTranslatedModelName(model, t)}</span>
-                      {/* Badge container - keeps badges aligned */}
-                      <div className="flex items-center gap-1.5 flex-shrink-0">
-                        {model.id === "parakeet-tdt-0.6b-v3" && isFirstRun && (
-                          <span
-                            className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
-                            style={{
-                              background: 'linear-gradient(135deg, rgba(250, 162, 202, 0.2) 0%, rgba(242, 140, 187, 0.15) 100%)',
-                              color: 'var(--color-logo-primary)',
-                              border: '1px solid rgba(250, 162, 202, 0.35)',
-                              boxShadow: '0 0 8px rgba(250, 162, 202, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-                            }}
-                          >
-                            {t("onboarding.recommended")}
-                          </span>
-                        )}
-                        {/* Show ANE badge for Whisper models on macOS (dimmed when not downloaded) */}
-                        {hasCoreMLSupport && (
-                          <span
-                            className="inline-flex items-center gap-1 pl-1 pr-1.5 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider opacity-60"
-                            style={{
-                              background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%)',
-                              color: '#67e8f9',
-                              border: '1px solid rgba(34, 211, 238, 0.2)',
-                            }}
-                            title={t("modelSelector.coreml.available")}
-                          >
-                            <svg className="w-3 h-3" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9H3.5a.5.5 0 0 1-.48-.641l2.5-8z"/>
-                            </svg>
-                            {t("modelSelector.ane", "ANE")}
-                          </span>
-                        )}
-                      </div>
+                    <div className="text-sm">
+                      <span className="truncate">
+                        {getTranslatedModelName(model, t)}
+                      </span>
                     </div>
                     <div className="text-xs text-text/40 italic pr-4 mt-0.5">
                       {getTranslatedModelDescription(model, t)}
@@ -440,7 +364,13 @@ const ModelDropdown: React.FC<ModelDropdownProps> = ({
                       {formatModelSize(Number(model.size_mb))}
                     </div>
                   </div>
-                  <div className="text-xs text-logo-primary tabular-nums">
+                  <div
+                    className={`text-xs text-logo-primary tabular-nums transition-opacity ${
+                      isDownloading && progress
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  >
                     {isDownloading && progress
                       ? `${Math.max(0, Math.min(100, Math.round(progress.percentage)))}%`
                       : t("modelSelector.download")}

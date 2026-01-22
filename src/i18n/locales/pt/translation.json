@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Pressione \u2318K para mais configura\u00e7\u00f5es",
+    "settingsHintWindows": "Pressione Ctrl+K para mais configura\u00e7\u00f5es"
+  },
+  "commandPalette": {
+    "label": "Paleta de comandos",
+    "placeholder": "Pesquisar configura\u00e7\u00f5es...",
+    "noResults": "Nenhum resultado encontrado",
+    "home": "In\u00edcio",
+    "hint": {
+      "navigate": "\u2191\u2193 para navegar",
+      "select": "\u21B5 para selecionar"
+    }
+  },
   "tray": {
     "settings": "Configurações...",
     "checkUpdates": "Verificar Atualizações...",
@@ -484,14 +498,8 @@
     "downloadingModel": "Baixando {{model}}...",
     "checkingUpdates": "Verificando atualizações...",
     "updateAvailable": "Atualização disponível: {{version}}",
-    "updateAvailableShort": "Atualização disponível",
     "upToDate": "Atualizado",
-    "downloadUpdate": "Baixar Atualização",
-    "restart": "Reiniciar",
     "updateCheckingDisabled": "Verificação de Atualização Desabilitada",
-    "downloading": "Baixando... {{progress}}%",
-    "installing": "Instalando...",
-    "preparing": "Preparando...",
     "checkForUpdates": "Verificar atualizações"
   },
   "common": {

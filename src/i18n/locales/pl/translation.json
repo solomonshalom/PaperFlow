@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Naci\u015bnij \u2318K aby otworzy\u0107 ustawienia",
+    "settingsHintWindows": "Naci\u015bnij Ctrl+K aby otworzy\u0107 ustawienia"
+  },
+  "commandPalette": {
+    "label": "Paleta polece\u0144",
+    "placeholder": "Szukaj ustawie\u0144...",
+    "noResults": "Nie znaleziono wynik\u00f3w",
+    "home": "Strona g\u0142\u00f3wna",
+    "hint": {
+      "navigate": "\u2191\u2193 nawigacja",
+      "select": "\u21B5 wybierz"
+    }
+  },
   "tray": {
     "settings": "Ustawienia...",
     "checkUpdates": "Sprawdź aktualizacje...",
@@ -484,14 +498,8 @@
     "downloadingModel": "Pobieranie {{model}}...",
     "checkingUpdates": "Sprawdzanie aktualizacji...",
     "updateAvailable": "Dostępna aktualizacja: {{version}}",
-    "updateAvailableShort": "Dostępna aktualizacja",
     "upToDate": "Aktualne",
-    "downloadUpdate": "Pobierz aktualizację",
-    "restart": "Uruchom ponownie",
     "updateCheckingDisabled": "Sprawdzanie aktualizacji wyłączone",
-    "downloading": "Pobieranie... {{progress}}%",
-    "installing": "Instalowanie...",
-    "preparing": "Przygotowywanie...",
     "checkForUpdates": "Sprawdź aktualizacje"
   },
   "common": {

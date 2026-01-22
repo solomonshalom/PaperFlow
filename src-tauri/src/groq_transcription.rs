@@ -72,7 +72,10 @@ impl GroqErrorKind {
     pub fn is_retryable(&self) -> bool {
         matches!(
             self,
-            GroqErrorKind::Timeout | GroqErrorKind::NetworkError | GroqErrorKind::ServerError | GroqErrorKind::RateLimited
+            GroqErrorKind::Timeout
+                | GroqErrorKind::NetworkError
+                | GroqErrorKind::ServerError
+                | GroqErrorKind::RateLimited
         )
     }
 
@@ -94,12 +97,8 @@ impl GroqErrorKind {
             GroqErrorKind::NetworkError => {
                 "Network error connecting to Groq. Please check your internet connection."
             }
-            GroqErrorKind::ServerError => {
-                "Groq server error. Please try again in a moment."
-            }
-            GroqErrorKind::AudioError => {
-                "Error processing audio. Please try recording again."
-            }
+            GroqErrorKind::ServerError => "Groq server error. Please try again in a moment.",
+            GroqErrorKind::AudioError => "Error processing audio. Please try recording again.",
             GroqErrorKind::Other => "Groq transcription failed. Please try again.",
         }
     }
@@ -117,7 +116,11 @@ fn calculate_timeout(audio_samples: &[f32]) -> Duration {
 }
 
 /// Classify an error into a specific error kind
-fn classify_error(status: Option<reqwest::StatusCode>, error_response: Option<&GroqErrorResponse>, req_error: Option<&reqwest::Error>) -> GroqErrorKind {
+fn classify_error(
+    status: Option<reqwest::StatusCode>,
+    error_response: Option<&GroqErrorResponse>,
+    req_error: Option<&reqwest::Error>,
+) -> GroqErrorKind {
     // Check request error first
     if let Some(e) = req_error {
         if e.is_timeout() {
@@ -144,7 +147,10 @@ fn classify_error(status: Option<reqwest::StatusCode>, error_response: Option<&G
         let err_type = err_resp.error.error_type.as_deref().unwrap_or("");
         let code = err_resp.error.code.as_deref().unwrap_or("");
 
-        if msg.contains("invalid api key") || msg.contains("invalid_api_key") || code == "invalid_api_key" {
+        if msg.contains("invalid api key")
+            || msg.contains("invalid_api_key")
+            || code == "invalid_api_key"
+        {
             return GroqErrorKind::InvalidApiKey;
         }
         if msg.contains("rate limit") || err_type == "rate_limit_exceeded" {
@@ -266,7 +272,10 @@ pub async fn transcribe(
                     format!("HTTP request failed: {}", e)
                 };
 
-                error!("Groq API request error: {} (kind: {:?})", error_msg, error_kind);
+                error!(
+                    "Groq API request error: {} (kind: {:?})",
+                    error_msg, error_kind
+                );
 
                 if error_kind.is_retryable() && attempt < MAX_RETRIES {
                     last_error = Some((error_kind, error_msg));
@@ -374,7 +383,9 @@ pub async fn transcribe_multilingual(
     };
 
     // Note: distil-whisper is English-only, so multilingual prompts won't help
-    if model_id == "groq-distil-whisper-large-v3-en" && (primary_language.is_some() || secondary_language.is_some()) {
+    if model_id == "groq-distil-whisper-large-v3-en"
+        && (primary_language.is_some() || secondary_language.is_some())
+    {
         warn!("distil-whisper-large-v3-en is English-only. Multilingual settings will be ignored.");
     }
 
@@ -475,7 +486,10 @@ pub async fn transcribe_multilingual(
                 let error_kind = classify_error(None, None, Some(&e));
                 let error_msg = error_kind.user_message().to_string();
 
-                error!("Groq multilingual API request error: {} (kind: {:?})", error_msg, error_kind);
+                error!(
+                    "Groq multilingual API request error: {} (kind: {:?})",
+                    error_msg, error_kind
+                );
 
                 if error_kind.is_retryable() && attempt < MAX_RETRIES {
                     last_error = Some((error_kind, error_msg));

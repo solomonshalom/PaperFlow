@@ -94,7 +94,7 @@ export const DiarizationSettings: React.FC<DiarizationSettingsProps> =
       } catch (error) {
         console.error("Failed to download models:", error);
         setDownloadError(
-          error instanceof Error ? error.message : "Download failed"
+          error instanceof Error ? error.message : "Download failed",
         );
         setIsDownloading(false);
       }

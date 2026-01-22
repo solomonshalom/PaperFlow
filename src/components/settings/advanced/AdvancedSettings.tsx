@@ -10,6 +10,7 @@ import { StartHidden } from "../StartHidden";
 import { AutostartToggle } from "../AutostartToggle";
 import { UpdateChecksToggle } from "../UpdateChecksToggle";
 import { DeveloperModeToggle } from "../DeveloperModeToggle";
+import { ShowSidebarToggle } from "../ShowSidebarToggle";
 
 // Recording & Input
 import { AlwaysOnMicrophone } from "../AlwaysOnMicrophone";
@@ -76,6 +77,7 @@ export const AdvancedSettings: React.FC = () => {
       >
         <StartHidden descriptionMode="tooltip" grouped={true} />
         <AutostartToggle descriptionMode="tooltip" grouped={true} />
+        <ShowSidebarToggle descriptionMode="tooltip" grouped={true} />
         <UpdateChecksToggle descriptionMode="tooltip" grouped={true} />
         <DeveloperModeToggle descriptionMode="tooltip" grouped={true} />
       </CollapsibleSection>

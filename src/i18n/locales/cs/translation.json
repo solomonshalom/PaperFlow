@@ -1,4 +1,18 @@
 {
+  "home": {
+    "settingsHint": "Stiskn\u011bte \u2318K pro dal\u0161\u00ed nastaven\u00ed",
+    "settingsHintWindows": "Stiskn\u011bte Ctrl+K pro dal\u0161\u00ed nastaven\u00ed"
+  },
+  "commandPalette": {
+    "label": "P\u0159\u00edkazov\u00e1 paleta",
+    "placeholder": "Hledat nastaven\u00ed...",
+    "noResults": "Nebyly nalezeny \u017e\u00e1dn\u00e9 v\u00fdsledky",
+    "home": "Dom\u016f",
+    "hint": {
+      "navigate": "\u2191\u2193 k navigaci",
+      "select": "\u21B5 pro v\u00fdb\u011br"
+    }
+  },
   "tray": {
     "settings": "Nastavení...",
     "checkUpdates": "Zkontrolovat aktualizace...",
@@ -468,14 +482,8 @@
     "downloadingModel": "Stahuji {{model}}...",
     "checkingUpdates": "Kontroluji aktualizace...",
     "updateAvailable": "Dostupná aktualizace: {{version}}",
-    "updateAvailableShort": "Dostupná aktualizace",
     "upToDate": "Vše aktuální",
-    "downloadUpdate": "Stáhnout aktualizaci",
-    "restart": "Restartovat",
     "updateCheckingDisabled": "Kontrola aktualizací vypnuta",
-    "downloading": "Stahování... {{progress}}%",
-    "installing": "Instalace...",
-    "preparing": "Příprava...",
     "checkForUpdates": "Zkontrolovat aktualizace"
   },
   "common": {

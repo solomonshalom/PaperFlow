@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Toaster } from "sonner";
+import { listen } from "@tauri-apps/api/event";
 import "./App.css";
 import AccessibilityPermissions from "./components/AccessibilityPermissions";
 import Footer from "./components/footer";
@@ -8,8 +9,15 @@ import { Sidebar, SidebarSection, SECTIONS_CONFIG } from "./components/Sidebar";
 import { useSettings } from "./hooks/useSettings";
 import { useSettingsStore } from "./stores/settingsStore";
 import { commands } from "@/bindings";
+import {
+  CommandPaletteProvider,
+  CommandPalette,
+  useCommandPalette,
+} from "./components/command-palette";
+import { HomePage } from "./components/home";
 
 type OnboardingStep = "accessibility" | "model" | "done";
+type AppView = "home" | SidebarSection;
 
 const renderSettingsContent = (section: SidebarSection) => {
   const ActiveComponent =
@@ -17,12 +25,13 @@ const renderSettingsContent = (section: SidebarSection) => {
   return <ActiveComponent />;
 };
 
-function App() {
+// Inner component that uses the command palette context
+function AppContent() {
   const [onboardingStep, setOnboardingStep] = useState<OnboardingStep | null>(
     null,
   );
-  const [currentSection, setCurrentSection] =
-    useState<SidebarSection>("general");
+  const [currentView, setCurrentView] = useState<AppView>("home");
+  const { togglePalette } = useCommandPalette();
   const { settings, updateSetting } = useSettings();
   const refreshAudioDevices = useSettingsStore(
     (state) => state.refreshAudioDevices,
@@ -48,10 +57,20 @@ function App() {
     }
   }, [onboardingStep, refreshAudioDevices, refreshOutputDevices]);
 
-  // Handle keyboard shortcuts for debug mode toggle
+  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Check for Ctrl+Shift+D (Windows/Linux) or Cmd+Shift+D (macOS)
+      // Check for Ctrl+K (Windows/Linux) or Cmd+K (macOS) for command palette
+      const isCommandPaletteShortcut =
+        event.key.toLowerCase() === "k" && (event.ctrlKey || event.metaKey);
+
+      if (isCommandPaletteShortcut) {
+        event.preventDefault();
+        togglePalette();
+        return;
+      }
+
+      // Check for Ctrl+Shift+D (Windows/Linux) or Cmd+Shift+D (macOS) for debug
       const isDebugShortcut =
         event.shiftKey &&
         event.key.toLowerCase() === "d" &&
@@ -71,7 +90,7 @@ function App() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [settings?.debug_mode, updateSetting]);
+  }, [settings?.debug_mode, updateSetting, togglePalette]);
 
   const checkOnboardingStatus = async () => {
     try {
@@ -98,6 +117,22 @@ function App() {
     setOnboardingStep("done");
   };
 
+  // Handle navigation from command palette or sidebar
+  const handleNavigate = useCallback((view: AppView) => {
+    setCurrentView(view);
+  }, []);
+
+  // Listen for tray menu navigation to settings
+  useEffect(() => {
+    const unlisten = listen("navigate-to-settings", () => {
+      setCurrentView("general");
+    });
+
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, []);
+
   // Still checking onboarding status
   if (onboardingStep === null) {
     return null;
@@ -110,6 +145,9 @@ function App() {
   if (onboardingStep === "model") {
     return <Onboarding onModelSelected={handleModelSelected} />;
   }
+
+  const isHomeView = currentView === "home";
+  const showSidebar = settings?.show_sidebar ?? false;
 
   return (
     <div className="h-screen flex flex-col select-none cursor-default">
@@ -127,23 +165,43 @@ function App() {
       />
       {/* Main content area that takes remaining space */}
       <div className="flex-1 flex overflow-hidden">
-        <Sidebar
-          activeSection={currentSection}
-          onSectionChange={setCurrentSection}
-        />
+        {/* Only show sidebar when enabled in settings and not on home view */}
+        {showSidebar && !isHomeView && (
+          <Sidebar
+            activeSection={currentView as SidebarSection}
+            onSectionChange={handleNavigate}
+          />
+        )}
         {/* Scrollable content area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto">
-            <div className="flex flex-col items-center p-4 gap-4">
-              <AccessibilityPermissions />
-              {renderSettingsContent(currentSection)}
-            </div>
+          <div
+            className={`flex-1 overflow-y-auto ${isHomeView ? "flex flex-col" : ""}`}
+          >
+            {isHomeView ? (
+              <HomePage />
+            ) : (
+              <div className="flex flex-col items-center p-4 gap-4">
+                <AccessibilityPermissions />
+                {renderSettingsContent(currentView as SidebarSection)}
+              </div>
+            )}
           </div>
         </div>
       </div>
       {/* Fixed footer at bottom */}
       <Footer />
+      {/* Command palette modal */}
+      <CommandPalette onNavigate={handleNavigate} />
     </div>
+  );
+}
+
+// Main App component with provider
+function App() {
+  return (
+    <CommandPaletteProvider>
+      <AppContent />
+    </CommandPaletteProvider>
   );
 }
 
